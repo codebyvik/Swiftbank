@@ -1,0 +1,28 @@
+{
+  "name": "swiftbank",
+  "version": "1.0.0",
+  "description": "banking application",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codebyvik/Swiftbank.git"
+  },
+  "keywords": [
+    "bank"
+  ],
+  "author": "Vikas B R",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codebyvik/Swiftbank/issues"
+  },
+  "homepage": "https://github.com/codebyvik/Swiftbank#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  }
+}
