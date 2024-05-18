@@ -3,11 +3,21 @@ const catchAsyncError = require("./utils/catchAsyncError");
 const AppError = require("./utils/AppError");
 const globalErrorController = require("./controllers/error");
 const dotenv = require("dotenv").config();
+const sequelize = require("./config/connectToDB");
+
+// session
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalStrategy = require("./config/passport-local-strategy");
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use("/", require("./routes/index"));
 
@@ -17,6 +27,24 @@ app.use(
     throw new AppError("route doesn't exist", 404);
   })
 );
+
+app.use(
+  session({
+    name: "Swiftbank",
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+      maxAge: 1000 * 60 * 100,
+    },
+    store: new SequelizeStore({
+      db: sequelize,
+    }),
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // handle errors
 app.use(globalErrorController);
