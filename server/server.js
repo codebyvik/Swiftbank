@@ -19,14 +19,11 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.use("/", require("./routes/index"));
-
-app.use(
-  "*",
-  catchAsyncError(async (req, res, next) => {
-    throw new AppError("route doesn't exist", 404);
-  })
-);
+const myStore = new SequelizeStore({
+  db: sequelize,
+  checkExpirationInterval: 15 * 60 * 1000,
+  expiration: 1000 * 60 * 100,
+});
 
 app.use(
   session({
@@ -37,14 +34,21 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 100,
     },
-    store: new SequelizeStore({
-      db: sequelize,
-    }),
+    store: myStore,
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use("/", require("./routes/index"));
+
+app.use(
+  "*",
+  catchAsyncError(async (req, res, next) => {
+    throw new AppError("route doesn't exist", 404);
+  })
+);
 
 // handle errors
 app.use(globalErrorController);

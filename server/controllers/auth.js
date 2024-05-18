@@ -97,7 +97,6 @@ module.exports.signup = catchAsyncError(async (req, res, next) => {
 
 // create session
 module.exports.signin = async (req, res) => {
-  console.log(req.user);
   return res.status(200).json("signin success");
 };
 

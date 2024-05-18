@@ -46,14 +46,19 @@ passport.serializeUser(function (user, done) {
 // de-serialising the user to decide which key to keep in the cookies
 
 passport.deserializeUser(async function (id, done) {
-  User.findById(id)
-    .then((user) => {
-      return done(null, user);
-    })
-    .catch((err) => {
-      console.log("Error in local auth", err);
-      return done(err);
-    });
+  try {
+    User.findByPk(id)
+      .then((user) => {
+        return done(null, user);
+      })
+      .catch((err) => {
+        console.log("Error in local auth", err);
+        return done(err);
+      });
+  } catch (error) {
+    console.log("error in deserializeUser", error);
+    return done(error);
+  }
 });
 
 // creating checkAuthentication function to check if the user is logged in
