@@ -3,8 +3,10 @@ const Auth = require("../db/models/auth");
 const Accounts = require("../db/models/accounts");
 
 const bcrypt = require("bcrypt");
+const catchAsyncError = require("../utils/catchAsyncError");
+const AppError = require("../utils/AppError");
 
-module.exports.signup = async (req, res) => {
+module.exports.signup = catchAsyncError(async (req, res, next) => {
   // destructured data from req.body
   const {
     user_type,
@@ -31,9 +33,7 @@ module.exports.signup = async (req, res) => {
     // console.log(userExists);
 
     if (userExists) {
-      return res
-        .status(409)
-        .json({ status: "fail", message: "email or phone number already exists" });
+      return next(new AppError("email or phone number already exists", 409));
     }
 
     const newUser = await User.create({
@@ -61,10 +61,7 @@ module.exports.signup = async (req, res) => {
     const saltRounds = 10;
     await bcrypt.hash(password, saltRounds, async function (err, hash) {
       if (err) {
-        console.log("error", err);
-        return res
-          .status(500)
-          .json({ status: "fail", message: "Something went wrong , please try again later" });
+        return next(new AppError("Something went wrong , please try again later", 500));
       }
 
       await Auth.create({
@@ -93,10 +90,10 @@ module.exports.signup = async (req, res) => {
 
     return res.status(201).json(newUser);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json("error");
+    console.log("error in signup controller", err);
+    return next(new AppError("Error while creating user", 500));
   }
-};
+});
 
 module.exports.getUsers = async (req, res) => {
   try {
