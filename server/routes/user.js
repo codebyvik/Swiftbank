@@ -3,6 +3,9 @@ const user = require("../controllers/user");
 const router = express.Router();
 const passport = require("passport");
 
+// admin
+router.get("/all", passport.checkAuthentication, user.getAllUsers);
+
 // return user
 router.get("/:id", passport.checkAuthentication, user.getUser);
 

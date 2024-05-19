@@ -17,6 +17,7 @@ module.exports = {
           primaryKey: true,
           allowNull: false,
           type: Sequelize.UUID,
+          defaultValue: Sequelize.UUIDV4,
           unique: true,
         },
         from_account_id: {

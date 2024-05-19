@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 
-module.exports.getUser = async (req, res, next) => {
+module.exports.getUser = catchAsyncError(async (req, res, next) => {
   try {
     if (req.params.id != req.user.id || req.user.user_type != "customer") {
       return next(new AppError("You are not authorised ", 401));
@@ -20,9 +20,30 @@ module.exports.getUser = async (req, res, next) => {
     console.log("error getting user", error);
     return next(new AppError("Error while updating profile ", 500));
   }
-};
+});
 
-module.exports.updateProfile = async (req, res, next) => {
+// ADMIN - GET ALL USERS
+module.exports.getAllUsers = catchAsyncError(async (req, res, next) => {
+  try {
+    if (req.user.user_type != "admin") {
+      return next(new AppError("You are not authorised ", 401));
+    }
+    const users = await User.findAll({ where: { user_type: "customer" } });
+
+    return res.status(200).json({
+      status: "success",
+      message: "user fetched",
+      users,
+    });
+  } catch (error) {
+    console.log("error getting all users", error);
+    return next(new AppError("Error while getting all users ", 500));
+  }
+});
+
+// UPDATE PROFILE
+
+module.exports.updateProfile = catchAsyncError(async (req, res, next) => {
   try {
     if (req.params.id != req.user.id) {
       return next(new AppError("You are not authorised ", 401));
@@ -41,9 +62,9 @@ module.exports.updateProfile = async (req, res, next) => {
     console.log("error getting user", error);
     return next(new AppError("Error while updating profile ", 500));
   }
-};
+});
 
-module.exports.updatePassword = async (req, res, next) => {
+module.exports.updatePassword = catchAsyncError(async (req, res, next) => {
   try {
     if (req.params.id != req.user.id) {
       return next(new AppError("You are not authorised ", 401));
@@ -59,4 +80,4 @@ module.exports.updatePassword = async (req, res, next) => {
     console.log("error getting user", error);
     return next(new AppError("Error while updating profile ", 500));
   }
-};
+});

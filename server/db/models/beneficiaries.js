@@ -10,7 +10,7 @@ const beneficiary = sequelize.define(
   {
     customer_id: {
       allowNull: false,
-      type: Sequelize.UUID,
+      type: DataTypes.UUID,
       references: {
         model: "users",
         key: "id",
@@ -19,12 +19,12 @@ const beneficiary = sequelize.define(
     beneficiary_id: {
       primaryKey: true,
       allowNull: false,
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       unique: true,
     },
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
@@ -36,7 +36,7 @@ const beneficiary = sequelize.define(
       },
     },
     bank_name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
@@ -48,7 +48,7 @@ const beneficiary = sequelize.define(
       },
     },
     account_number: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
       references: {
         model: "accounts",
@@ -56,17 +56,17 @@ const beneficiary = sequelize.define(
       },
     },
     transfer_limit: {
-      type: Sequelize.DECIMAL(10, 0),
+      type: DataTypes.DECIMAL(10, 0),
       allowNull: false,
     },
 
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
     },
   },
   {
