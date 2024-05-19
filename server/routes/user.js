@@ -3,10 +3,13 @@ const user = require("../controllers/user");
 const router = express.Router();
 const passport = require("passport");
 
+// return current user
+router.get("/", passport.checkAuthentication, user.sendCurrentUser);
+
 // admin
 router.get("/all", passport.checkAuthentication, user.getAllUsers);
 
-// return user
+// return particular user
 router.get("/:id", passport.checkAuthentication, user.getUser);
 
 // update user profile

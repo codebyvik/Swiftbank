@@ -6,19 +6,35 @@ const bcrypt = require("bcrypt");
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 
-module.exports.getUser = catchAsyncError(async (req, res, next) => {
+// get current user
+module.exports.sendCurrentUser = catchAsyncError(async (req, res, next) => {
   try {
-    if (req.params.id != req.user.id || req.user.user_type != "customer") {
-      return next(new AppError("You are not authorised ", 401));
-    }
     return res.status(200).json({
       status: "success",
       message: "user fetched",
       user: req.user,
     });
   } catch (error) {
-    console.log("error getting user", error);
-    return next(new AppError("Error while updating profile ", 500));
+    console.log("error in sending current user", error);
+    return next(new AppError("You are not authorised ", 401));
+  }
+});
+
+// get user through id
+module.exports.getUser = catchAsyncError(async (req, res, next) => {
+  try {
+    if (req.user.user_type != "admin") {
+      return next(new AppError("You are not authorised ", 401));
+    }
+    const user = await User.findOne({ where: { id: req.params.id } });
+    return res.status(200).json({
+      status: "success",
+      message: "user fetched",
+      user,
+    });
+  } catch (error) {
+    console.log("error getting user profile", error);
+    return next(new AppError("Error while getting user profile ", 500));
   }
 });
 

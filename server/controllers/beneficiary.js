@@ -16,8 +16,12 @@ module.exports.addBenefeciary = catchAsyncError(async (req, res, next) => {
 
     const account = await Accounts.findOne({ where: { account_number: account_number } });
 
-    if (!account || account.user_id === req.user.id) {
-      return next(new AppError("Enter Valid account number", 404));
+    if (!account) {
+      return next(new AppError("Account doesn't exist", 404));
+    }
+
+    if (account.user_id === req.user.id) {
+      return next(new AppError("you can't add your account as beneficiary", 404));
     }
 
     const checkBeneficiary = await Beneficiary.findOne({

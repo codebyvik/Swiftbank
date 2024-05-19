@@ -21,6 +21,7 @@ const transactions = sequelize.define(
       primaryKey: true,
       allowNull: false,
       type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       unique: true,
     },
     from_account_id: {
