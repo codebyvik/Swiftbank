@@ -22,6 +22,7 @@ module.exports = {
             model: "users",
             key: "email",
           },
+          onUpdate: "CASCADE",
           validate: {
             notNull: {
               msg: "Email cannot be null",

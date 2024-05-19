@@ -88,7 +88,11 @@ module.exports.signup = catchAsyncError(async (req, res, next) => {
       });
     }
 
-    return res.status(201).json(newUser);
+    return res.status(200).json({
+      status: "success",
+      message: "user created succesfully",
+      user: newUser,
+    });
   } catch (err) {
     console.log("error in signup controller", err);
     return next(new AppError("Error while creating user", 500));
@@ -96,17 +100,21 @@ module.exports.signup = catchAsyncError(async (req, res, next) => {
 });
 
 // create session
-module.exports.signin = async (req, res) => {
+module.exports.signin = catchAsyncError(async (req, res) => {
   return res.status(200).json("signin success");
-};
+});
 
 // signout user
-module.exports.signout = async (req, res) => {
+module.exports.signout = catchAsyncError(async (req, res, next) => {
   req.logout(function (err) {
     if (err) {
-      return console.log("error signing out");
+      console.log("error signing out");
+      return next(new AppError("Error while signing out ", 500));
     }
   });
 
-  return res.status(200).json("signed out successfully");
-};
+  return res.status(200).json({
+    status: "success",
+    message: "signed out successfully",
+  });
+});

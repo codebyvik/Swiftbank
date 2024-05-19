@@ -41,6 +41,7 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.STRING,
           unique: true,
+          onUpdate: "CASCADE",
           validate: {
             notNull: {
               msg: "Email cannot be null",

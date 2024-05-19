@@ -53,6 +53,7 @@ const user = sequelize.define(
           msg: "Email cannot be empty",
         },
       },
+      onUpdate: "CASCADE",
     },
     user_type: {
       allowNull: false,
@@ -229,14 +230,29 @@ const user = sequelize.define(
   }
 );
 
-user.hasOne(auth, { foreignKey: "user_id", type: DataTypes.UUID });
-user.hasOne(accounts, { foreignKey: "user_id", type: DataTypes.UUID });
-user.hasMany(transactions, { foreignKey: "user_id", type: DataTypes.UUID });
+user.hasOne(auth, {
+  foreignKey: "user_id",
+  type: DataTypes.UUID,
+  onUpdate: "CASCADE",
+});
+user.hasOne(auth, {
+  foreignKey: "email",
+  type: DataTypes.STRING,
+  onUpdate: "CASCADE",
+});
+user.hasOne(accounts, { foreignKey: "user_id", type: DataTypes.UUID, onUpdate: "CASCADE" });
+user.hasMany(transactions, { foreignKey: "user_id", type: DataTypes.UUID, onUpdate: "CASCADE" });
 
 auth.belongsTo(user, {
   foreignKey: "user_id",
   type: DataTypes.UUID,
 });
+
+auth.belongsTo(user, {
+  foreignKey: "email",
+  type: DataTypes.STRING,
+});
+
 accounts.belongsTo(user, {
   foreignKey: "user_id",
   type: DataTypes.UUID,

@@ -69,7 +69,10 @@ passport.checkAuthentication = function (req, res, next) {
     return next();
   }
   // if user is not logged in
-  return res.status(401).json("not authorised , please signin to continue");
+  return res.status(401).json({
+    status: "fail",
+    message: "not authorised , please signin to continue",
+  });
 };
 
 module.exports = passport;
