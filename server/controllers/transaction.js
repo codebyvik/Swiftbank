@@ -1,15 +1,14 @@
-const User = require("../db/models/user");
-const Auth = require("../db/models/auth");
 const Accounts = require("../db/models/accounts");
 const transactionModel = require("../db/models/transactions");
 
 const sequelize = require("../config/connectToDB");
-const bcrypt = require("bcrypt");
+
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 
+//  Send money to beneificiary account
 module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
-  const { amount, beneficiary, description } = req.body;
+  const { amount, beneficiary, description, transaction_PIN } = req.body;
 
   // to apply transaction so if anything fails transaction can be rolled back
   const transaction = await sequelize.transaction();
@@ -24,8 +23,6 @@ module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
       where: { account_number: beneficiary.account_number },
     });
 
-    console.log("receiverAccount", receiverAccount);
-
     // check if sender and receiver are same
     if (senderAccount.user_id === receiverAccount.user_id) {
       return next(new AppError("use add money option", 401));
@@ -34,6 +31,11 @@ module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
     // check if user has enough balance
     if (parseFloat(amount) > parseFloat(senderAccount.balance)) {
       return next(new AppError("you don't have sufficient balance", 401));
+    }
+
+    // check for transaction pin
+    if (transaction_PIN != senderAccount.transaction_PIN) {
+      return next(new AppError("wrong transaction pin", 401));
     }
 
     // transfer money
@@ -51,17 +53,16 @@ module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
       }
     );
 
+    // update balance in both accounts
     const balance = {
       senderBalance: parseFloat(senderAccount.balance) - parseFloat(amount),
       receiverBalance: parseFloat(receiverAccount.balance) + parseFloat(amount),
     };
 
-    console.log(balance);
-
-    // update the balance
     await senderAccount.update({ balance: balance.senderBalance });
     await receiverAccount.update({ balance: balance.receiverBalance });
 
+    // add transaction to transaction table
     await transaction.commit();
 
     return res.status(200).json({
@@ -76,8 +77,9 @@ module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
   }
 });
 
+// Add money to self account
 module.exports.addMoney = catchAsyncError(async (req, res, next) => {
-  const { amount, description } = req.body;
+  const { amount, description, transaction_PIN } = req.body;
   // to apply transaction so if anything fails transaction can be rolled back
   const transaction = await sequelize.transaction();
 
@@ -87,6 +89,11 @@ module.exports.addMoney = catchAsyncError(async (req, res, next) => {
     }
     // get account info
     const account = await Accounts.findOne({ where: { user_id: req.user.id } });
+
+    // check for transaction pin
+    if (transaction_PIN != account.transaction_PIN) {
+      return next(new AppError("wrong transaction pin", 401));
+    }
 
     // transfer money
     const newTransaction = await transactionModel.create(
@@ -121,9 +128,12 @@ module.exports.addMoney = catchAsyncError(async (req, res, next) => {
   }
 });
 
+// get one transaction by ID
 module.exports.getOneTransaction = catchAsyncError(async (req, res, next) => {
   try {
     let transaction;
+    // if user is customer then get the transaction which belongs to user
+    //  else if the user is admin get the transaction details
     if (req.user.user_type != "admin") {
       transaction = await transactionModel.findOne({
         where: { user_id: req.user.id, transaction_id: req.params.id },
@@ -134,6 +144,7 @@ module.exports.getOneTransaction = catchAsyncError(async (req, res, next) => {
       });
     }
 
+    // if transaction doesn't exist throw error
     if (!transaction) {
       return next(new AppError("transaction not found", 404));
     }
@@ -149,6 +160,7 @@ module.exports.getOneTransaction = catchAsyncError(async (req, res, next) => {
   }
 });
 
+// get all transactions
 module.exports.getAllTransactions = catchAsyncError(async (req, res, next) => {
   // pagination , sends 10 results each time
   const page = req.query.page || 1; // current page
@@ -166,11 +178,12 @@ module.exports.getAllTransactions = catchAsyncError(async (req, res, next) => {
   try {
     let transaction;
 
+    // if user is customer send all transactions which belong to  current customer
+    // else if it's admin send all transactions
+
     if (req.user.user_type != "admin") {
       whereCondition.user_id = req.user.id;
 
-      console.log(whereCondition);
-      //   return next(new AppError("No authorization", 401));
       transaction = await transactionModel.findAndCountAll({
         offset,
         limit,
