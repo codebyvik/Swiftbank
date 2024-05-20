@@ -7,6 +7,10 @@ module.exports = {
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT,
     dialect: "postgres",
+    dialectOptions: {
+      useUTC: false, // for reading from database
+    },
+    timezone: "+05:30",
   },
   test: {
     username: process.env.DATABASE_USER,
@@ -14,6 +18,10 @@ module.exports = {
     database: process.env.DATABASE,
     host: process.env.DATABASE_HOST,
     dialect: "postgres",
+    dialectOptions: {
+      useUTC: false, // for reading from database
+    },
+    timezone: "+05:30",
   },
   production: {
     username: process.env.DATABASE_USER,
@@ -21,5 +29,9 @@ module.exports = {
     database: process.env.DATABASE,
     host: process.env.DATABASE_HOST,
     dialect: "postgres",
+    dialectOptions: {
+      useUTC: false, // for reading from database
+    },
+    timezone: "+05:30",
   },
 };

@@ -40,16 +40,29 @@ module.exports.getUser = catchAsyncError(async (req, res, next) => {
 
 // ADMIN - GET ALL USERS
 module.exports.getAllUsers = catchAsyncError(async (req, res, next) => {
+  const page = req.query.page || 1; //current page
+  const limit = 10; // limit is set to 10
+
+  const offset = (parseInt(page) - 1) * limit; // calculate how many to skip
+  const order = req.query.sort || "DESC"; //   sorting , by default descending
+
   try {
     if (req.user.user_type != "admin") {
       return next(new AppError("You are not authorised ", 401));
     }
-    const users = await User.findAll({ where: { user_type: "customer" } });
+    const users = await User.findAndCountAll({
+      where: { user_type: "customer" },
+      limit,
+      offset,
+      order: [["createdAt", order]],
+    });
 
     return res.status(200).json({
       status: "success",
       message: "user fetched",
-      users,
+      totalCustomers: users?.count,
+      totalPages: Math.ceil(parseInt(users?.count) / limit),
+      users: users.rows,
     });
   } catch (error) {
     console.log("error getting all users", error);

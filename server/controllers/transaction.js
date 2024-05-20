@@ -128,11 +128,11 @@ module.exports.getOneTransaction = catchAsyncError(async (req, res, next) => {
       transaction = await transactionModel.findOne({
         where: { user_id: req.user.id, transaction_id: req.params.id },
       });
+    } else {
+      transaction = await transactionModel.findOne({
+        where: { transaction_id: req.params.id },
+      });
     }
-
-    transaction = await transactionModel.findOne({
-      where: { transaction_id: req.params.id },
-    });
 
     if (!transaction) {
       return next(new AppError("transaction not found", 404));
@@ -150,16 +150,48 @@ module.exports.getOneTransaction = catchAsyncError(async (req, res, next) => {
 });
 
 module.exports.getAllTransactions = catchAsyncError(async (req, res, next) => {
+  // pagination , sends 10 results each time
+  const page = req.query.page || 1; // current page
+  const limit = 10; // limit is set to 10
+  const offset = (parseInt(page) - 1) * limit; // calculate how many to skip
+  //   sorting , by default descending
+  const order = req.query.sort || "DESC";
+
+  //   add to where query if trnsaction type exists
+  let whereCondition = {};
+  if (req.query.transactionType) {
+    whereCondition.transaction_type = req.query.transactionType;
+  }
+
   try {
+    let transaction;
+
     if (req.user.user_type != "admin") {
-      return next(new AppError("No authorization", 401));
+      whereCondition.user_id = req.user.id;
+
+      console.log(whereCondition);
+      //   return next(new AppError("No authorization", 401));
+      transaction = await transactionModel.findAndCountAll({
+        offset,
+        limit,
+        where: whereCondition,
+        order: [["createdAt", order]],
+      });
+    } else {
+      transaction = await transactionModel.findAndCountAll({
+        offset,
+        limit,
+        where: whereCondition,
+        order: [["createdAt", order]],
+      });
     }
-    const transaction = await transactionModel.findAll();
 
     return res.status(200).json({
       status: "success",
       message: "fetched all transactions",
-      transaction,
+      totalPages: Math.ceil(transaction?.count / limit),
+      totalEntries: transaction?.count,
+      transactions: transaction?.rows,
     });
   } catch (error) {
     console.log("error while fetching all transactions ", error);
