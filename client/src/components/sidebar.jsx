@@ -1,28 +1,33 @@
 import { useNavigate } from "react-router-dom";
-
-import { styled, useTheme } from "@mui/material/styles";
-
+// material ui components
 import MuiDrawer from "@mui/material/Drawer";
-
-import List from "@mui/material/List";
-
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-
+import {
+  styled,
+  useTheme,
+  List,
+  Divider,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
+  IconButton,
+} from "@mui/material";
+// material ui Icons
+// import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   AccountBalance,
   Groups,
   PeopleAlt,
   ReceiptLong,
   SpaceDashboard,
+  ChevronLeft,
+  ChevronRight,
+  DarkMode,
+  LightMode,
 } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDarkMode } from "../redux/config.slice";
 
 const drawerWidth = 240;
 
@@ -74,17 +79,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 );
 
 const Sidebar = ({ openSidebar, setOpenSidebar }) => {
+  const mode = useSelector((state) => state.config.mode);
+  const dispatch = useDispatch();
   const theme = useTheme();
   const navigate = useNavigate();
 
   const handleDrawerClose = () => {
     setOpenSidebar(false);
   };
+  const toggle = () => {
+    dispatch(toggleDarkMode());
+  };
+
   return (
     <Drawer variant="permanent" open={openSidebar}>
       <DrawerHeader>
         <IconButton onClick={handleDrawerClose}>
-          {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          {theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
         </IconButton>
       </DrawerHeader>
       <Divider />
@@ -207,6 +218,30 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
         </ListItem>
       </List>
       <Divider />
+      <List>
+        <ListItem onClick={toggle} disablePadding sx={{ display: "block" }}>
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: openSidebar ? "initial" : "center",
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: openSidebar ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+              {mode === "light" ? <DarkMode /> : <LightMode />}
+            </ListItemIcon>
+            <ListItemText sx={{ opacity: openSidebar ? 1 : 0 }}>
+              {mode === "light" ? "Dark Mode" : "Light Mode"}
+            </ListItemText>
+          </ListItemButton>
+        </ListItem>
+      </List>
     </Drawer>
   );
 };

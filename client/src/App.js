@@ -16,10 +16,28 @@ import SignUp from "./pages/auth/signup";
 import Sidebar from "./components/sidebar";
 import { Box, CssBaseline, ThemeProvider, styled } from "@mui/material";
 import { useState } from "react";
-import CustomTheme from "./utils/customTheme";
 import ViewBeneficiaries from "./pages/beneficiaries/view_beneficiaries";
+import { useSelector } from "react-redux";
+
+import { createTheme } from "@mui/material";
 
 function App() {
+  const mode = useSelector((state) => state.config.mode);
+
+  const customLightTheme = createTheme({
+    palette: {
+      mode: "light",
+      primary: {
+        main: "#4774e6",
+      },
+    },
+  });
+  const customDarkTheme = createTheme({
+    palette: {
+      mode: "dark",
+    },
+  });
+
   const [openSidebar, setOpenSidebar] = useState(false);
 
   const DrawerHeader = styled("div")(({ theme }) => ({
@@ -33,15 +51,15 @@ function App() {
   }));
 
   return (
-    <ThemeProvider theme={CustomTheme}>
+    <ThemeProvider theme={mode === "light" ? customLightTheme : customDarkTheme}>
       <CssBaseline />
       <Router>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ transition: "all 0.3s linear", display: "flex" }}>
           <Navbar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
           <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
-
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <DrawerHeader />
+
             <Routes>
               {/* common  routes */}
               <Route path="/profile" element={<Profile />}></Route>

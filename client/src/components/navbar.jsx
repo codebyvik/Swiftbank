@@ -1,4 +1,4 @@
-import logo from "../assets/logo-orange-transparent.png";
+import logo from "../assets/logo-white-transparent-icon.png";
 import { AccountBalanceWallet, Logout, AccountCircle } from "@mui/icons-material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import MuiAppBar from "@mui/material/AppBar";
 import {
   IconButton,
-  Typography,
   styled,
   Toolbar,
   Box,
@@ -72,6 +71,7 @@ const Navbar = ({ openSidebar, setOpenSidebar }) => {
             edge="start"
             sx={{
               marginRight: 5,
+
               ...(openSidebar && { display: "none" }),
             }}
           >
@@ -81,10 +81,7 @@ const Navbar = ({ openSidebar, setOpenSidebar }) => {
             sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
             onClick={(e) => navigate("/")}
           >
-            <img src={logo} alt="Swiftbank" width="50px" />
-            <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }} ml={2}>
-              Swift Bank
-            </Typography>
+            <img src={logo} alt="Swiftbank" width="150px" />
           </Box>
         </Box>
 
