@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTheme } from "@mui/material";
 import { fetchUserStart } from "./redux/auth/auth.slice";
 import { SnackbarProvider } from "notistack";
+import { ProtectedRoute } from "./utils/protectedRoute";
 
 function App() {
   const mode = useSelector((state) => state.config.mode);
@@ -96,7 +97,10 @@ function App() {
               <Route path="/account/info" element={<AccountInfo />}></Route>
 
               {/* customer only routes */}
-              <Route path="/" element={<CustomerDashboard />}></Route>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<CustomerDashboard />}></Route>
+              </Route>
+
               <Route path="/beneficiaries/:id" element={<Beneficiary />}></Route>
               <Route path="/beneficiaries" element={<ViewBeneficiaries />}></Route>
               <Route path="/beneficiaries/add" element={<AddBeneficiary />}></Route>

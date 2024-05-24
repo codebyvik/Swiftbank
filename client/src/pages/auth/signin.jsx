@@ -42,7 +42,7 @@ const SignIn = () => {
   };
 
   return (
-    <Box sx={{ width: "500px", marginX: "auto" }}>
+    <Box sx={{ width: "500px", marginX: "auto", mt: 15 }}>
       <Card sx={{ padding: 4 }}>
         <CardContent>
           <Box>
