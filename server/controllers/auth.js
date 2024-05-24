@@ -5,6 +5,7 @@ const Accounts = require("../db/models/accounts");
 const bcrypt = require("bcrypt");
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
+const { Op } = require("sequelize");
 
 module.exports.signup = catchAsyncError(async (req, res, next) => {
   // destructured data from req.body
@@ -24,13 +25,23 @@ module.exports.signup = catchAsyncError(async (req, res, next) => {
     user_maritalStatus,
     address,
     password,
+    account_type,
   } = req.body;
 
   try {
     // check if user exists , if users exists return with 409
-    const userExists = await User.findOne({ where: { email: email, phone_number: phone_number } });
-
-    // console.log(userExists);
+    const userExists = await User.findOne({
+      where: {
+        [Op.or]: [
+          {
+            email: email,
+          },
+          {
+            phone_number: phone_number,
+          },
+        ],
+      },
+    });
 
     if (userExists) {
       return next(new AppError("email or phone number already exists", 409));
@@ -83,7 +94,7 @@ module.exports.signup = catchAsyncError(async (req, res, next) => {
         user_id: newUser.id,
         account_number: newAccountnumber,
         balance: 0.0,
-        account_type: "savings",
+        account_type,
         transaction_PIN: "1234",
       });
     }
@@ -101,7 +112,9 @@ module.exports.signup = catchAsyncError(async (req, res, next) => {
 
 // create session
 module.exports.signin = catchAsyncError(async (req, res) => {
-  return res.status(200).json("signin success");
+  return res
+    .status(200)
+    .json({ status: "success", message: "signed in successfully", user: req.user });
 });
 
 // signout user

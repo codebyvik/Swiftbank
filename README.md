@@ -1,16 +1,12 @@
-
 # Swiftbank
 
-This is a full-stack banking web application using React for the frontend, Node.js for the backend, and PostgreSQL for data management. The project's primary goals are to create a secure and user-friendly platform that allows both customers and administrators to perform essential banking tasks seamlessly. 
+This is a full-stack banking web application using React for the frontend, Node.js for the backend, and PostgreSQL for data management. The project's primary goals are to create a secure and user-friendly platform that allows both customers and administrators to perform essential banking tasks seamlessly.
 
+## Pre-requisite
 
+1. Node.js : [download node.js](https://nodejs.org/en/download/package-manager)
 
-##  Pre-requisite 
-
-1) Node.js : [download node.js](https://nodejs.org/en/download/package-manager)
-
-2) PostgreSQL : [download Postgres](https://www.postgresql.org/download/)
-
+2. PostgreSQL : [download Postgres](https://www.postgresql.org/download/)
 
 ## Environment Variables
 
@@ -20,19 +16,17 @@ To run this project, you will need to add the following environment variables to
 
 `SERVER_PORT=8000`
 
-
 DATABASE CONNECTION
 
-`DATABASE_USER = YOUR_DATABASE_USER_NAME` 
+`DATABASE_USER = YOUR_DATABASE_USER_NAME`
 
 `DATABASE_PASSWORD = YOUR_DATABASE_USER_NAME`
 
-`DATABASE_PORT = YOUR_DATABASE_PORT`  // 5432 is default port
+`DATABASE_PORT = YOUR_DATABASE_PORT` // 5432 is default port
 
 `DATABASE_HOST = 127.0.0.1`
 
 `DATABASE = Swiftbank`
-
 
 SESSION
 
@@ -53,11 +47,13 @@ Go to the project directory
 ```
 
 ### starting server (back-end)
+
 Go to the server directory
 
 ```bash
   cd server
 ```
+
 Install dependencies
 
 ```bash
@@ -67,11 +63,13 @@ Install dependencies
 **Database and table creation **
 
 Create Database
+
 ```bash
   npx sequelize-cli db:create
 ```
 
 Create Tables
+
 ```bash
   npx sequelize-cli db:migrate
 ```
@@ -82,10 +80,8 @@ Start the server
   npm start
 ```
 
-
-
-
 ### starting client(front-end)
+
 Go to the client directory
 
 ```bash
@@ -103,4 +99,3 @@ Start the server
 ```bash
   npm run start
 ```
-

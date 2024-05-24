@@ -105,7 +105,7 @@ module.exports = {
         },
         user_profession: {
           allowNull: false,
-          type: Sequelize.ENUM("salaried", "student", "unemployed", "others"),
+          type: Sequelize.ENUM("salaried", "student", "unemployed", "others", "self employed"),
           validate: {
             notNull: {
               msg: "Profession  cannot be null",

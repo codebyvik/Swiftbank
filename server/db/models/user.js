@@ -109,7 +109,7 @@ const user = sequelize.define(
     },
     user_profession: {
       allowNull: false,
-      type: DataTypes.ENUM("salaried", "student", "unemployed", "others"),
+      type: DataTypes.ENUM("salaried", "student", "unemployed", "others", "self employed"),
       validate: {
         notNull: {
           msg: "Profession  cannot be null",

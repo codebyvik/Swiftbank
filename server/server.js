@@ -4,7 +4,7 @@ const AppError = require("./utils/AppError");
 const globalErrorController = require("./controllers/error");
 const dotenv = require("dotenv").config();
 const sequelize = require("./config/connectToDB");
-
+const cors = require("cors");
 // session
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -14,6 +14,13 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const app = express();
 
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
