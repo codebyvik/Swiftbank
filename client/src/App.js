@@ -15,14 +15,23 @@ import SignIn from "./pages/auth/signin";
 import SignUp from "./pages/auth/signup";
 import Sidebar from "./components/sidebar";
 import { Box, CssBaseline, ThemeProvider, styled } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ViewBeneficiaries from "./pages/beneficiaries/view_beneficiaries";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { createTheme } from "@mui/material";
+import { fetchUserStart } from "./redux/auth/auth.slice";
+import { SnackbarProvider } from "notistack";
 
 function App() {
   const mode = useSelector((state) => state.config.mode);
+  const user = useSelector((state) => state.user.user);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUserStart());
+  }, [dispatch]);
 
   const customLightTheme = createTheme({
     palette: {
@@ -53,12 +62,27 @@ function App() {
   return (
     <ThemeProvider theme={mode === "light" ? customLightTheme : customDarkTheme}>
       <CssBaseline />
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        autoHideDuration={2000}
+        preventDuplicate
+      />
       <Router>
         <Box sx={{ transition: "all 0.3s linear", display: "flex" }}>
-          <Navbar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
-          <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+          {user ? (
+            <>
+              <Navbar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+              <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+            </>
+          ) : (
+            <></>
+          )}
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <DrawerHeader />
+            {user ? <DrawerHeader /> : <></>}
 
             <Routes>
               {/* common  routes */}

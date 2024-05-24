@@ -16,6 +16,8 @@ import {
   MenuItem,
   Tooltip,
 } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { SignoutUserStart } from "../redux/auth/auth.slice";
 
 const drawerWidth = 240;
 
@@ -43,6 +45,13 @@ const StyledToolbar = styled(Toolbar)({
 });
 
 const Navbar = ({ openSidebar, setOpenSidebar }) => {
+  // logout
+  const dispatch = useDispatch();
+
+  const handleSignout = () => {
+    dispatch(SignoutUserStart());
+    handleClose();
+  };
   //   used to navigate to links
   const navigate = useNavigate();
 
@@ -134,16 +143,26 @@ const Navbar = ({ openSidebar, setOpenSidebar }) => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem onClick={(e) => navigate("/profile")}>
+          <MenuItem
+            onClick={(e) => {
+              navigate("/profile");
+              handleClose();
+            }}
+          >
             <AccountCircle sx={{ marginRight: 0.5, color: "gray" }} />
             Profile
           </MenuItem>
-          <MenuItem onClick={(e) => navigate("/account/info")}>
+          <MenuItem
+            onClick={(e) => {
+              navigate("/account/info");
+              handleClose();
+            }}
+          >
             <AccountBalanceWallet sx={{ marginRight: 0.5, color: "gray" }} />
             My account
           </MenuItem>
           <Divider />
-          <MenuItem>
+          <MenuItem onClick={handleSignout}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
