@@ -5,6 +5,7 @@ const globalErrorController = require("./controllers/error");
 const dotenv = require("dotenv").config();
 const sequelize = require("./config/connectToDB");
 const cors = require("cors");
+
 // session
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -23,6 +24,8 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// use static folder
+app.use(express.static("uploads"));
 
 app.use(cookieParser());
 
