@@ -19,6 +19,7 @@ import { ArrowForward, CurrencyRupee, Groups, Payments } from "@mui/icons-materi
 import Title from "../../utils/Page_title";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
+import { Link } from "react-router-dom";
 
 const CustomerDashboard = () => {
   Title("Dashboard");
@@ -56,9 +57,11 @@ const CustomerDashboard = () => {
                 xs={12}
                 md={6}
               >
-                <Button href="/accounts/info" variant="text">
-                  View account info <ArrowForward />{" "}
-                </Button>
+                <Link to="/account/info">
+                  <Button variant="text">
+                    View account info <ArrowForward />
+                  </Button>
+                </Link>
               </Grid>
             </Grid>
           </CardContent>
@@ -93,7 +96,7 @@ const CustomerDashboard = () => {
                             sameElse: "DD/MM/YYYY h:mm A",
                           })}
                         </TableCell>
-                        <TableCell>{transaction.description}</TableCell>
+                        <TableCell width="400px">{transaction.description}</TableCell>
                         <TableCell>
                           <CurrencyRupee /> {transaction.amount_transferred}
                         </TableCell>
@@ -120,28 +123,28 @@ const CustomerDashboard = () => {
               </Table>
             </TableContainer>
             <Typography textAlign="end" my={2}>
-              <Button variant="text" color="primary" href="/transactions">
-                View all Transactions <ArrowForward />
-              </Button>
+              <Link to="/transactions">
+                <Button variant="text" color="primary">
+                  View all Transactions <ArrowForward />
+                </Button>
+              </Link>
             </Typography>
           </CardContent>
         </Card>
       </Grid>
       <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          startIcon={<Payments />}
-          variant="contained"
-          color="primary"
-          href="/send-money"
-          sx={{ mr: 2 }}
-        >
-          Send Money
-        </Button>
+        <Link to="/send-mony">
+          <Button startIcon={<Payments />} variant="contained" color="primary" sx={{ mr: 2 }}>
+            Send Money
+          </Button>
+        </Link>
 
-        <Button sx={{ mr: 2 }} variant="contained" href="/add-beneficiary">
-          <Groups />
-          View Beneficiaries
-        </Button>
+        <Link to="/add-beneficiary">
+          <Button sx={{ mr: 2 }} variant="contained">
+            <Groups />
+            View Beneficiaries
+          </Button>
+        </Link>
       </Grid>
     </Grid>
   );

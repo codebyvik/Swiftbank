@@ -26,6 +26,8 @@ const transactionSlice = createSlice({
     fetchTransactionsSuccessfull: (state, action) => {
       state.fetching = false;
       state.transactions = action.payload.transactions;
+      state.totalPages = action.payload?.totalPages;
+      state.totalEntries = action.payload?.totalEntries;
     },
   },
 });
