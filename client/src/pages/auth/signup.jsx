@@ -19,7 +19,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import logo from "../../assets/logo-transparent.png";
 import { useDispatch, useSelector } from "react-redux";
 import { SignUpUserStart } from "../../redux/auth/auth.slice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Title from "../../utils/Page_title";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 
@@ -35,11 +35,12 @@ const SignUp = () => {
   Title("Signup");
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
+  const location = useLocation();
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(location.state?.fromLocation || "/");
     }
-  }, [user, navigate]);
+  }, [user, navigate, location]);
 
   const [phoneNo, setPhoneNo] = useState("");
   const [credentials, setCredentials] = useState({

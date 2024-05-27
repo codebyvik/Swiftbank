@@ -16,6 +16,7 @@ import SignUp from "./pages/auth/signup";
 import Sidebar from "./components/sidebar";
 import { Box, CssBaseline, ThemeProvider, styled } from "@mui/material";
 import { useEffect, useState } from "react";
+import React from "react";
 import ViewBeneficiaries from "./pages/beneficiaries/view_beneficiaries";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,15 +24,16 @@ import { createTheme } from "@mui/material";
 import { fetchUserStart } from "./redux/auth/auth.slice";
 import { SnackbarProvider } from "notistack";
 import { ProtectedRoute } from "./utils/protectedRoute";
+import SimpleBackdrop from "./utils/backdrop";
 
 function App() {
   const mode = useSelector((state) => state.config.mode);
-  const user = useSelector((state) => state.user.user);
+  const { isAuthenticated, loading, user } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchUserStart());
+    return () => dispatch(fetchUserStart());
   }, [dispatch]);
 
   const customLightTheme = createTheme({
@@ -72,6 +74,7 @@ function App() {
         autoHideDuration={2000}
         preventDuplicate
       />
+
       <Router>
         <Box sx={{ transition: "all 0.3s linear", display: "flex" }}>
           {user ? (
@@ -84,22 +87,22 @@ function App() {
           )}
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             {user ? <DrawerHeader /> : <></>}
-
+            {loading && !isAuthenticated ? <SimpleBackdrop open /> : <></>}
             <Routes>
               {/* common  routes */}
-              <Route path="/profile" element={<Profile />}></Route>
-              <Route path="/transactions" element={<Transactions />}></Route>
-              <Route path="/transactions/:id" element={<Transaction />}></Route>
-
               <Route path="/signin" element={<SignIn />}></Route>
               <Route path="/signup" element={<SignUp />}></Route>
 
-              <Route path="/account/info" element={<AccountInfo />}></Route>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/profile" element={<Profile />}></Route>
+                <Route path="/transactions" element={<Transactions />}></Route>
+                <Route path="/transactions/:id" element={<Transaction />}></Route>
+                <Route path="/account/info" element={<AccountInfo />}></Route>
+              </Route>
 
               {/* customer only routes */}
-              <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<CustomerDashboard />}></Route>
-              </Route>
+
+              <Route path="/" element={<CustomerDashboard />}></Route>
 
               <Route path="/beneficiaries/:id" element={<Beneficiary />}></Route>
               <Route path="/beneficiaries" element={<ViewBeneficiaries />}></Route>

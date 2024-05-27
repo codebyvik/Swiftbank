@@ -1,18 +1,24 @@
 import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+// import SimpleBackdrop from "./backdrop";
 
-// export const ProtectedRoute = ({ children }) => {
-//   const user = useSelector((state) => state.user.user);
-//   // if user not signed in
-//   if (!user) {
-//     <Navigate to="/signin" />;
-//   }
-
-//   return children;
-// };
-
-export const ProtectedRoute = () => {
+export const ProtectedAdminRoute = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
 
   return isAuthenticated && user ? <Outlet /> : <Navigate to="signin" />;
+};
+
+export const ProtectedCustomerRoute = () => {
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+
+  return isAuthenticated && user ? <Outlet /> : <Navigate to="signin" />;
+};
+
+export const ProtectedRoute = () => {
+  // const { isAuthenticated, user, loading } = useSelector((state) => state.user);
+  const location = useLocation();
+  const currlocation = location.pathname;
+  const isLoggedIn = localStorage.getItem("loggedIn");
+
+  return isLoggedIn ? <Outlet /> : <Navigate to="/signin" state={{ fromLocation: currlocation }} />;
 };

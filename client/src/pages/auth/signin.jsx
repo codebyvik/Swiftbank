@@ -15,18 +15,19 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import logo from "../../assets/logo-transparent.png";
 import { useDispatch, useSelector } from "react-redux";
 import { SigninUserStart } from "../../redux/auth/auth.slice";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Title from "../../utils/Page_title";
 
 const SignIn = () => {
   Title("SignIn");
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
+  const location = useLocation();
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(location.state?.fromLocation || "/");
     }
-  }, [user, navigate]);
+  }, [user, navigate, location]);
 
   const [credentials, setCredentials] = useState({ email: "", password: "" });
 

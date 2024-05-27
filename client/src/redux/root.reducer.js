@@ -1,11 +1,9 @@
 import configReducer from "./config.slice";
 import UserReducer from "./auth/auth.slice";
-export const StateType = {
-  // Reducers types here
-};
+import { combineReducers } from "redux";
 
-const rootReducers = {
+const rootReducers = combineReducers({
   config: configReducer,
   user: UserReducer,
-};
+});
 export default rootReducers;

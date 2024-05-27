@@ -8,8 +8,10 @@ axios.defaults.withCredentials = true;
 function* fetchCurrentUserData() {
   try {
     const { data } = yield axios.get("http://localhost:8000/api/v1/user/");
+    yield localStorage.setItem("loggedIn", true);
     yield put(fetchUserSuccess(data));
   } catch (error) {
+    yield localStorage.removeItem("loggedIn");
     yield put(fetchUserError(error.response.data));
   }
 }
@@ -22,6 +24,8 @@ function* signinUserStart({ payload }) {
   try {
     const { data } = yield axios.post("http://localhost:8000/api/v1/auth/signin", payload);
     AlertUser("Signin success", "success");
+    yield localStorage.setItem("loggedIn", true);
+
     yield put(fetchUserSuccess(data));
   } catch (error) {
     if (error.response.data === "Unauthorized") {
@@ -45,6 +49,7 @@ function* SignUpUser({ payload }) {
     yield put(fetchUserSuccess());
     yield window.location.replace("http://localhost:3000/signin");
   } catch (error) {
+    yield localStorage.removeItem("loggedIn");
     AlertUser(error.response.data.message, "error");
     yield put(fetchUserError(error.response.data));
   }
@@ -59,6 +64,7 @@ function* SignoutUser() {
     yield axios.get("http://localhost:8000/api/v1/auth/signout");
     AlertUser("Logged out successfully", "success");
     document.cookie = `Swiftbank=; expires= ${new Date(0).toUTCString()}; path=/;`;
+    yield localStorage.removeItem("loggedIn");
     yield put(SignoutUserSuccess());
     yield window.location.reload();
   } catch (error) {
