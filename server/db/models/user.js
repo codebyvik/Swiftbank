@@ -258,9 +258,4 @@ accounts.belongsTo(user, {
   type: DataTypes.UUID,
 });
 
-transactions.belongsTo(user, {
-  foreignKey: "user_id",
-  type: DataTypes.UUID,
-});
-
 module.exports = user;

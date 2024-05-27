@@ -92,20 +92,24 @@ const accounts = sequelize.define(
 
 accounts.hasMany(transactions, {
   foreignKey: "to_account_id",
+  as: "To_account_id",
   onUpdate: "CASCADE",
 });
 
 accounts.hasMany(transactions, {
   foreignKey: "from_account_id",
+  as: "From_account_id",
   onUpdate: "CASCADE",
 });
 
 transactions.belongsTo(accounts, {
   foreignKey: "from_account_id",
+  as: "From_account_id",
 });
 
 transactions.belongsTo(accounts, {
   foreignKey: "to_account_id",
+  as: "To_account_id",
 });
 
 module.exports = accounts;
