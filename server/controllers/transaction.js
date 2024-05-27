@@ -1,10 +1,11 @@
 const Accounts = require("../db/models/accounts");
 const transactionModel = require("../db/models/transactions");
-
+const User = require("../db/models/user");
 const sequelize = require("../config/connectToDB");
 
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
+const { Op } = require("sequelize");
 
 //  Send money to beneificiary account
 module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
@@ -164,7 +165,7 @@ module.exports.getOneTransaction = catchAsyncError(async (req, res, next) => {
 module.exports.getAllTransactions = catchAsyncError(async (req, res, next) => {
   // pagination , sends 10 results each time
   const page = req.query.page || 1; // current page
-  const limit = 10; // limit is set to 10
+  const limit = 3; // limit is set to 10
   const offset = (parseInt(page) - 1) * limit; // calculate how many to skip
   //   sorting , by default descending
   const order = req.query.sort || "DESC";
@@ -182,13 +183,50 @@ module.exports.getAllTransactions = catchAsyncError(async (req, res, next) => {
     // else if it's admin send all transactions
 
     if (req.user.user_type != "admin") {
-      whereCondition.user_id = req.user.id;
+      const account = await Accounts.findOne({ where: { user_id: req.user.id } });
+      if (req.query.transactionType === "debit") {
+        whereCondition = {
+          from_account_id: account.account_id,
+          user_id: req.user.id,
+          [Op.not]: { to_account_id: account.account_id },
+        };
+      } else if (req.query.transactionType === "credit") {
+        whereCondition = {
+          to_account_id: account.account_id,
+          user_id: req.user.id,
+        };
+      } else {
+        whereCondition.user_id = req.user.id;
+      }
+
+      console.log("where", whereCondition);
 
       transaction = await transactionModel.findAndCountAll({
         offset,
         limit,
         where: whereCondition,
         order: [["createdAt", order]],
+        include: [
+          {
+            model: Accounts,
+            as: "To_account_id",
+            attributes: { exclude: ["transaction_PIN"] },
+            include: {
+              model: User,
+              attributes: ["first_name", "last_name"],
+            },
+          },
+          {
+            model: Accounts,
+            as: "From_account_id",
+            attributes: { exclude: ["transaction_PIN"] },
+            include: {
+              model: User,
+              attributes: ["first_name", "last_name"],
+            },
+            required: true,
+          },
+        ],
       });
     } else {
       transaction = await transactionModel.findAndCountAll({
@@ -196,6 +234,27 @@ module.exports.getAllTransactions = catchAsyncError(async (req, res, next) => {
         limit,
         where: whereCondition,
         order: [["createdAt", order]],
+        include: [
+          {
+            model: Accounts,
+            as: "To_account_id",
+            attributes: { exclude: ["transaction_PIN"] },
+            include: {
+              model: User,
+              attributes: ["first_name", "last_name"],
+            },
+          },
+          {
+            model: Accounts,
+            as: "From_account_id",
+            attributes: { exclude: ["transaction_PIN"] },
+            include: {
+              model: User,
+              attributes: ["first_name", "last_name"],
+            },
+            required: true,
+          },
+        ],
       });
     }
 
