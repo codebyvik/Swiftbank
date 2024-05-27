@@ -16,7 +16,7 @@ import {
   MenuItem,
   Tooltip,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SignoutUserStart } from "../redux/auth/auth.slice";
 
 const drawerWidth = 240;
@@ -45,6 +45,7 @@ const StyledToolbar = styled(Toolbar)({
 });
 
 const Navbar = ({ openSidebar, setOpenSidebar }) => {
+  const { user } = useSelector((state) => state.user);
   // logout
   const dispatch = useDispatch();
 
@@ -104,7 +105,13 @@ const Navbar = ({ openSidebar, setOpenSidebar }) => {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <Avatar sx={{ width: 40, height: 40 }}>V</Avatar>
+              <Avatar
+                src={`http://localhost:8000/users/avatars/${user.avatar}`}
+                sx={{ width: 40, height: 40 }}
+                alt="profile image"
+              >
+                V
+              </Avatar>
             </IconButton>
           </Tooltip>
         </Box>

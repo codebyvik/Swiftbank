@@ -236,6 +236,7 @@ const Profile = () => {
                   fontSize: { xs: "24px", md: "64px" },
                   my: 3,
                 }}
+                alt="profile image"
               >
                 {user?.first_name.charAt(0)}
               </Avatar>

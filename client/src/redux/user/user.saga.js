@@ -2,7 +2,6 @@ import { takeLatest, put } from "redux-saga/effects";
 import axios from "axios";
 import { fetchUserSuccess, fetchUserError } from "../auth/auth.slice";
 import AlertUser from "../../utils/show_alert";
-import { useSelector } from "react-redux";
 
 axios.defaults.withCredentials = true;
 
