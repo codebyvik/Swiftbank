@@ -98,11 +98,10 @@ function App() {
                 <Route path="/transactions" element={<Transactions />}></Route>
                 <Route path="/transactions/:id" element={<Transaction />}></Route>
                 <Route path="/account/info" element={<AccountInfo />}></Route>
+                <Route path="/" element={<CustomerDashboard />}></Route>
               </Route>
 
               {/* customer only routes */}
-
-              <Route path="/" element={<CustomerDashboard />}></Route>
 
               <Route path="/beneficiaries/:id" element={<Beneficiary />}></Route>
               <Route path="/beneficiaries" element={<ViewBeneficiaries />}></Route>
