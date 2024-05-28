@@ -211,6 +211,11 @@ module.exports = {
             },
           },
         },
+        isActive: {
+          allowNull: false,
+          type: Sequelize.BOOLEAN,
+          defaultValue: false,
+        },
         createdAt: {
           allowNull: false,
           type: Sequelize.DATE,

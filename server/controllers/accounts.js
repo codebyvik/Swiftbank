@@ -1,5 +1,5 @@
 const Accounts = require("../db/models/accounts");
-
+const Branch = require("../db/models/branch");
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 const Transactions = require("../db/models/transactions");
@@ -154,11 +154,13 @@ module.exports.getSingleAccount = catchAsyncError(async (req, res, next) => {
       account = await Accounts.findOne({
         where: { user_id: req.user.id },
         attributes: { exclude: ["transaction_PIN"] },
+        include: Branch,
       });
     } else {
       accounts = await Accounts.findOne({
         where: { user_id: req.params.id },
         attributes: { exclude: ["transaction_PIN"] },
+        include: Branch,
       });
     }
 
@@ -177,9 +179,9 @@ module.exports.getSingleAccount = catchAsyncError(async (req, res, next) => {
 
 module.exports.getAllAccounts = catchAsyncError(async (req, res, next) => {
   try {
-    // if (req.user.user_type === "customer") {
-    //   return next(new AppError("You are not Authorised ", 401));
-    // }
+    if (req.user.user_type === "customer") {
+      return next(new AppError("You are not Authorised ", 401));
+    }
 
     // pagination , sends 10 results each time
     const page = req.query.page || 1; // current page

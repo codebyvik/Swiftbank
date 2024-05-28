@@ -4,6 +4,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../../config/connectToDB");
 const transactions = require("./transactions");
 const user = require("./user");
+const branch = require("./branch");
 
 const accounts = sequelize.define(
   "accounts",
@@ -76,6 +77,14 @@ const accounts = sequelize.define(
         },
       },
     },
+    branch_id: {
+      allowNull: false,
+      type: DataTypes.UUID,
+      references: {
+        model: "branch",
+        key: "branchId",
+      },
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
@@ -110,6 +119,12 @@ transactions.belongsTo(accounts, {
 transactions.belongsTo(accounts, {
   foreignKey: "to_account_id",
   as: "To_account_id",
+});
+
+branch.hasMany(accounts, { foreignKey: "branch_id" });
+
+accounts.belongsTo(branch, {
+  foreignKey: "branch_id",
 });
 
 module.exports = accounts;

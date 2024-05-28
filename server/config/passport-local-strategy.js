@@ -24,12 +24,21 @@ passport.use(
           const isPasswordMatched = await bcrypt.compare(password, userAuth.password);
           if (isPasswordMatched) {
             const user = await User.findOne({ where: { email: email } });
-            return done(null, user);
+
+            if (user.user_type === "admin") {
+              return done(null, user);
+            }
+
+            if (user.isActive) {
+              return done(null, user);
+            }
+
+            return done(null, false, { status: "error", message: "Account is suspended" });
           }
-          return done(null, false);
+          return done(null, false, { status: "error", message: "Email or password don't match" });
         }
 
-        return done(null, false);
+        return done(null, false, { status: "error", message: "user not found" });
       } catch (error) {
         console.log("error in passport local", error);
         return done(error);

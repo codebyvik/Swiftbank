@@ -6,6 +6,7 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
+const ForgotPassword = require("../db/models/forgotpassword");
 
 // get current user
 module.exports.sendCurrentUser = catchAsyncError(async (req, res, next) => {
@@ -127,14 +128,22 @@ module.exports.updateProfile = catchAsyncError(async (req, res, next) => {
 });
 
 module.exports.forgotPassword = catchAsyncError(async (req, res, next) => {
+  const { OTP } = req.body;
   try {
-    const user = await User.findOne({ where: { email: req.body.email } });
+    const user = await User.findOne({ where: { id: req.params.id } });
     if (!user) {
       return next(new AppError("User doesn't exist ", 404));
     }
 
+    const getOTP = await ForgotPassword.findOne({ where: { email: user.email } });
+
+    if (OTP !== getOTP.OTP) {
+      return next(new AppError("Wrong OTP ", 401));
+    }
+
     const hash = await bcrypt.hash(req.body.new_password, 10);
     await Auth.update({ password: hash }, { where: { user_id: user.id } });
+    await ForgotPassword.destroy({ where: { email: user.email } });
     return res.status(200).json({
       status: "success",
       message: "updated successfully",

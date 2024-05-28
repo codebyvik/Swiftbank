@@ -37,6 +37,7 @@ router.post(
   upload.single("avatar"),
   user.updateProfile
 );
-router.post("/update/forgot-password/", user.forgotPassword);
+
+router.post("/forgot-password/:id", user.forgotPassword);
 
 module.exports = router;

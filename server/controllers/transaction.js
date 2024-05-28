@@ -6,6 +6,7 @@ const sequelize = require("../config/connectToDB");
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
 const { Op } = require("sequelize");
+const { SentMail, ReceivedMail } = require("../mail/transaction_mail");
 
 //  Send money to beneificiary account
 module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
@@ -19,9 +20,13 @@ module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
       return next(new AppError("should be a customer to send money", 401));
     }
     // get sender account info and receiver account info
-    const senderAccount = await Accounts.findOne({ where: { user_id: req.user.id } });
+    const senderAccount = await Accounts.findOne({
+      where: { user_id: req.user.id },
+      include: User,
+    });
     const receiverAccount = await Accounts.findOne({
       where: { account_number: beneficiary.account_number },
+      include: User,
     });
 
     // check if sender and receiver are same
@@ -53,6 +58,17 @@ module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
         transaction: transaction,
       }
     );
+
+    await SentMail({
+      to: senderAccount?.user?.email,
+      amount: amount,
+      user: receiverAccount?.user?.first_name,
+    });
+    await ReceivedMail({
+      to: receiverAccount?.user?.email,
+      amount: amount,
+      user: senderAccount?.user?.first_name,
+    });
 
     // update balance in both accounts
     const balance = {

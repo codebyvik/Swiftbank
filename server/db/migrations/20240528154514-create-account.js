@@ -62,7 +62,6 @@ module.exports = {
         },
         transaction_PIN: {
           type: Sequelize.STRING,
-
           allowNull: false,
           validate: {
             notNull: {
@@ -71,6 +70,14 @@ module.exports = {
             notEmpty: {
               msg: "transaction pin cannot be empty",
             },
+          },
+        },
+        branch_id: {
+          allowNull: false,
+          type: Sequelize.UUID,
+          references: {
+            model: "branch",
+            key: "branchId",
           },
         },
         createdAt: {

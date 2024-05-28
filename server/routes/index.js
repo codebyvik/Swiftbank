@@ -8,5 +8,6 @@ router.use("/api/v1/beneficiary", require("./beneficiary"));
 router.use("/api/v1/transaction", require("./transaction"));
 router.use("/api/v1/transaction", require("./transaction"));
 router.use("/api/v1/account", require("./accounts"));
+router.use("/api/v1/branch", require("./branch"));
 
 module.exports = router;
