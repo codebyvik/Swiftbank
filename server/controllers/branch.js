@@ -80,7 +80,7 @@ module.exports.deleteBranch = catchAsyncError(async (req, res, next) => {
 
     await Accounts.update({ branch_id: new_branch }, { where: { branch_id: curr_branch } });
 
-    await Branch.destroy({ where: { branch_id: curr_branch } });
+    await Branch.destroy({ where: { branchId: curr_branch } });
 
     return res.status(200).json({
       status: "success",
