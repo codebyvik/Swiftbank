@@ -9,6 +9,7 @@ const AppError = require("../utils/AppError");
 const { Op } = require("sequelize");
 const { accountCreated, accountStatus } = require("../mail/account_mail");
 const sendResetLinkMail = require("../mail/forgot_password");
+const Branch = require("../db/models/branch");
 
 module.exports.signup = catchAsyncError(async (req, res, next) => {
   // destructured data from req.body
@@ -171,18 +172,23 @@ module.exports.toggleUserStatus = catchAsyncError(async (req, res, next) => {
       return next(new AppError("User doesn't exist ", 404));
     }
 
-    user.update({ isActive: isActive });
+    await user.update({ isActive: isActive });
 
     if (isActive === "true") {
       await accountStatus({ message: "Activated" });
     } else {
       await accountStatus({ message: "Deactivated" });
     }
-    console.log(isActive === "true");
+
+    const account = await Accounts.findOne({
+      where: { user_id: user.id },
+      include: [Branch, User],
+    });
 
     return res.status(200).json({
       status: "success",
       message: "toggled successfully",
+      account,
     });
   } catch (error) {
     console.log("error setting user status", error);

@@ -33,13 +33,27 @@ module.exports.addBranch = catchAsyncError(async (req, res, next) => {
 
 // get all branches
 module.exports.getAllBranches = catchAsyncError(async (req, res, next) => {
+  // pagination , sends 10 results each time
+  const page = req.query.page || 1; // current page
+  const limit = 10; // limit is set to 10
+  const offset = (parseInt(page) - 1) * limit; // calculate how many to skip
+  //   sorting , by default descending
+  const order = req.query.sort || "DESC";
+  const name = req.query.name || "";
   try {
-    const branches = await Branch.findAll();
+    const branches = await Branch.findAndCountAll({
+      offset,
+      limit,
+      order: [["createdAt", order]],
+      where: { branch_name: { [Op.iLike]: `%${name}%` } },
+    });
 
     return res.status(200).json({
       status: "success",
       message: "branches fetched",
-      branch: branches,
+      totalPages: Math.ceil(branches?.count / limit),
+      totalEntries: branches?.count,
+      branches: branches?.rows,
     });
   } catch (error) {
     console.log("error in fetching all branches", error);
@@ -59,6 +73,7 @@ module.exports.getBranchDetails = catchAsyncError(async (req, res, next) => {
     return res.status(200).json({
       status: "success",
       message: "branch fetched",
+
       branch,
     });
   } catch (error) {
@@ -101,6 +116,15 @@ module.exports.updateBranchDetails = catchAsyncError(async (req, res, next) => {
     const branch = await Branch.findOne({
       where: { branchId: req.params.id },
     });
+
+    if (req.body.IFSC) {
+      const IsIfscAvailable = await Branch.findOne({
+        where: { IFSC: { [Op.iLike]: `%${req.body.IFSC}%` } },
+      });
+      if (IsIfscAvailable) {
+        return next(new AppError("IFSC code already exists", 403));
+      }
+    }
 
     if (!branch) {
       return next(new AppError("branch doesn't exist", 404));

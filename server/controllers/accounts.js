@@ -5,6 +5,7 @@ const AppError = require("../utils/AppError");
 const Transactions = require("../db/models/transactions");
 const { Op } = require("sequelize");
 const User = require("../db/models/user");
+
 // update transaction pin
 module.exports.updateTransactionPin = catchAsyncError(async (req, res, next) => {
   try {
@@ -37,6 +38,7 @@ module.exports.dashboard = catchAsyncError(async (req, res, next) => {
       const account = await Accounts.findOne({
         where: { user_id: req.user.id },
         attributes: { exclude: ["transaction_PIN"] },
+        include: Branch,
       });
 
       const transactions = await Transactions.findAll({
@@ -88,22 +90,13 @@ module.exports.dashboard = catchAsyncError(async (req, res, next) => {
         limit: 5,
         order: [["createdAt", "DESC"]],
         attributes: { exclude: ["transaction_PIN"] },
+        include: Branch,
       });
 
       const transactions = await Transactions.findAll({
         offset: 0,
         limit: 5,
         order: [["createdAt", "DESC"]],
-        where: {
-          [Op.or]: [
-            {
-              from_account_id: account.account_id,
-            },
-            {
-              to_account_id: account.account_id,
-            },
-          ],
-        },
         include: [
           {
             model: Accounts,
@@ -157,10 +150,10 @@ module.exports.getSingleAccount = catchAsyncError(async (req, res, next) => {
         include: Branch,
       });
     } else {
-      accounts = await Accounts.findOne({
+      account = await Accounts.findOne({
         where: { user_id: req.params.id },
         attributes: { exclude: ["transaction_PIN"] },
-        include: Branch,
+        include: [Branch, User],
       });
     }
 
@@ -189,12 +182,29 @@ module.exports.getAllAccounts = catchAsyncError(async (req, res, next) => {
     const offset = (parseInt(page) - 1) * limit; // calculate how many to skip
     //   sorting , by default descending
     const order = req.query.sort || "DESC";
+    const name = req.query.name || "";
 
     const accounts = await Accounts.findAndCountAll({
       offset,
       limit,
       order: [["createdAt", order]],
       attributes: { exclude: ["transaction_PIN"] },
+      include: [
+        {
+          model: Branch,
+          attributes: ["branch_name"],
+        },
+        {
+          model: User,
+          attributes: ["first_name", "last_name"],
+          where: {
+            [Op.or]: [
+              { first_name: { [Op.iLike]: `%${name}%` } },
+              { last_name: { [Op.iLike]: `%${name}%` } },
+            ],
+          },
+        },
+      ],
     });
 
     return res.status(200).json({
