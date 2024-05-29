@@ -46,7 +46,7 @@ function ViewBeneficiaries() {
               <TableCell>XYZ Bank</TableCell>
               <TableCell>
                 <Button variant="contained" color="primary">
-                  Edit
+                  <a href="/beneficiaries/:id">view/edit</a>
                 </Button>
                 <Button variant="contained" color="secondary">
                   Delete

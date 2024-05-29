@@ -170,8 +170,10 @@ function Transactions() {
 
   return (
     <div>
-      <Typography variant="h4">Transactions</Typography>
-      {/* <TextField label="Search" variant="outlined" fullWidth margin="normal" /> */}
+      <Typography color="primary" variant="h4">
+        Transactions
+      </Typography>
+
       <Grid container spacing={3} my={2}>
         <Grid item>
           <FormControl fullWidth>
@@ -254,9 +256,13 @@ function Transactions() {
           }}
         >
           <Typography>No transactions found</Typography>
-          <Button variant="text" href="/send">
-            click here to send money
-          </Button>
+          {user && user.user_type === "customer" ? (
+            <Button variant="text" href="/send">
+              click here to send money
+            </Button>
+          ) : (
+            <></>
+          )}
         </Card>
       )}
     </div>

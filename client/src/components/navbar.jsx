@@ -159,15 +159,20 @@ const Navbar = ({ openSidebar, setOpenSidebar }) => {
             <AccountCircle sx={{ marginRight: 0.5, color: "gray" }} />
             Profile
           </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              navigate("/account/info");
-              handleClose();
-            }}
-          >
-            <AccountBalanceWallet sx={{ marginRight: 0.5, color: "gray" }} />
-            My account
-          </MenuItem>
+          {user && user.user_type === "admin" ? (
+            ""
+          ) : (
+            <MenuItem
+              onClick={(e) => {
+                navigate("/account/info");
+                handleClose();
+              }}
+            >
+              <AccountBalanceWallet sx={{ marginRight: 0.5, color: "gray" }} />
+              My account
+            </MenuItem>
+          )}
+
           <Divider />
           <MenuItem onClick={handleSignout}>
             <ListItemIcon>

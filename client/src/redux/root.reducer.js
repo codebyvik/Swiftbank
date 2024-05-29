@@ -2,6 +2,7 @@ import configReducer from "./config.slice";
 import UserReducer from "./auth/auth.slice";
 import AccountReducer from "./accounts/account.slice";
 import TransactionsReducer from "./transactions/transactions.slice";
+import BranchesReducer from "./branches/branches.slice";
 import { combineReducers } from "redux";
 
 const rootReducers = combineReducers({
@@ -9,5 +10,6 @@ const rootReducers = combineReducers({
   user: UserReducer,
   accounts: AccountReducer,
   transactions: TransactionsReducer,
+  branches: BranchesReducer,
 });
 export default rootReducers;

@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Typography, TextField, Button, MenuItem, Grid } from "@mui/material";
+import { Typography, TextField, Button, MenuItem, Grid, Box } from "@mui/material";
+
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+const steps = ["Select beneciary", "enter amount", "confirm"];
 
 function InitiateTransaction() {
   const [transaction, setTransaction] = useState({
@@ -20,6 +25,16 @@ function InitiateTransaction() {
 
   return (
     <div>
+      <Box sx={{ width: "100%" }}>
+        <Stepper activeStep={1} alternativeLabel>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
+
       <Typography variant="h4">Send Money</Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>

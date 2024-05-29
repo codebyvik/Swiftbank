@@ -6,11 +6,17 @@ export const configSlice = createSlice({
     mode: "light",
   },
   reducers: {
-    toggleDarkMode: (state) => {
-      if (state.mode === "light") {
-        state.mode = "dark";
+    toggleDarkMode: (state, action) => {
+      if (action.payload) {
+        state.mode = action.payload;
       } else {
-        state.mode = "light";
+        if (state.mode === "light") {
+          state.mode = "dark";
+          localStorage.setItem("mode", "dark");
+        } else {
+          state.mode = "light";
+          localStorage.setItem("mode", "light");
+        }
       }
     },
   },

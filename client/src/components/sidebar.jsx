@@ -25,6 +25,8 @@ import {
   ChevronRight,
   DarkMode,
   LightMode,
+  AccountTree,
+  AdminPanelSettings,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode } from "../redux/config.slice";
@@ -79,6 +81,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
 );
 
 const Sidebar = ({ openSidebar, setOpenSidebar }) => {
+  const { user } = useSelector((state) => state.user);
   const mode = useSelector((state) => state.config.mode);
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -115,7 +118,7 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
                 justifyContent: "center",
               }}
             >
-              <SpaceDashboard />
+              {user && user.user_type === "admin" ? <AdminPanelSettings /> : <SpaceDashboard />}
             </ListItemIcon>
             <ListItemText primary={"Dashboard"} sx={{ opacity: openSidebar ? 1 : 0 }} />
           </ListItemButton>
@@ -141,12 +144,7 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
             <ListItemText primary={"All Accounts"} sx={{ opacity: openSidebar ? 1 : 0 }} />
           </ListItemButton>
         </ListItem>
-
-        <ListItem
-          onClick={() => navigate("/account/info")}
-          disablePadding
-          sx={{ display: "block" }}
-        >
+        <ListItem onClick={() => navigate("/branch")} disablePadding sx={{ display: "block" }}>
           <ListItemButton
             sx={{
               minHeight: 48,
@@ -161,11 +159,40 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
                 justifyContent: "center",
               }}
             >
-              <AccountBalance />
+              <AccountTree />
             </ListItemIcon>
-            <ListItemText primary={"My Account"} sx={{ opacity: openSidebar ? 1 : 0 }} />
+            <ListItemText primary={"All branches"} sx={{ opacity: openSidebar ? 1 : 0 }} />
           </ListItemButton>
         </ListItem>
+
+        {user && user.user_type === "admin" ? (
+          <></>
+        ) : (
+          <ListItem
+            onClick={() => navigate("/account/info")}
+            disablePadding
+            sx={{ display: "block" }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: openSidebar ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: openSidebar ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <AccountBalance />
+              </ListItemIcon>
+              <ListItemText primary={"My Account"} sx={{ opacity: openSidebar ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        )}
 
         <ListItem
           onClick={() => navigate("/transactions")}
@@ -192,30 +219,34 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
           </ListItemButton>
         </ListItem>
 
-        <ListItem
-          onClick={() => navigate("/beneficiaries")}
-          disablePadding
-          sx={{ display: "block" }}
-        >
-          <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: openSidebar ? "initial" : "center",
-              px: 2.5,
-            }}
+        {user && user.user_type === "admin" ? (
+          <></>
+        ) : (
+          <ListItem
+            onClick={() => navigate("/beneficiaries")}
+            disablePadding
+            sx={{ display: "block" }}
           >
-            <ListItemIcon
+            <ListItemButton
               sx={{
-                minWidth: 0,
-                mr: openSidebar ? 3 : "auto",
-                justifyContent: "center",
+                minHeight: 48,
+                justifyContent: openSidebar ? "initial" : "center",
+                px: 2.5,
               }}
             >
-              <Groups />
-            </ListItemIcon>
-            <ListItemText primary={"Beneficiaries"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-          </ListItemButton>
-        </ListItem>
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: openSidebar ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <Groups />
+              </ListItemIcon>
+              <ListItemText primary={"Beneficiaries"} sx={{ opacity: openSidebar ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
       <Divider />
       <List>

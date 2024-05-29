@@ -1,17 +1,17 @@
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 // import SimpleBackdrop from "./backdrop";
 
 export const ProtectedAdminRoute = () => {
-  const { isAuthenticated, user } = useSelector((state) => state.user);
-
-  return isAuthenticated && user ? <Outlet /> : <Navigate to="signin" />;
+  const user_type = localStorage.getItem("user_type");
+  const isLoggedIn = localStorage.getItem("loggedIn");
+  return isLoggedIn && user_type === "admin" ? <Outlet /> : <Navigate to="/" />;
 };
 
 export const ProtectedCustomerRoute = () => {
-  const { isAuthenticated, user } = useSelector((state) => state.user);
-
-  return isAuthenticated && user ? <Outlet /> : <Navigate to="signin" />;
+  const user_type = localStorage.getItem("user_type");
+  const isLoggedIn = localStorage.getItem("loggedIn");
+  return isLoggedIn && user_type === "customer" ? <Outlet /> : <Navigate to="/" />;
 };
 
 export const ProtectedRoute = () => {

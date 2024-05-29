@@ -6,8 +6,8 @@ const InititaltransactionState = {
   error: null,
   transaction: null,
   transactions: null,
-  totalPages: 1,
-  totalEntries: 9,
+  totalPages: 0,
+  totalEntries: 0,
   totalTransactions: null,
 };
 

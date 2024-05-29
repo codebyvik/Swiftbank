@@ -20,18 +20,18 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllAccounts } from "../../redux/accounts/account.slice";
 import Title from "../../utils/Page_title";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import { Link } from "react-router-dom";
+import { fetchAllbranchesStart } from "../../redux/branches/branches.slice";
 
 // format date
 dayjs.extend(calendar);
 
-const AllAccounts = () => {
-  Title("All accounts");
-  const { accounts, totalPages } = useSelector((state) => state.accounts);
+const AllBranches = () => {
+  Title("All branches");
+  const { branches, totalPages } = useSelector((state) => state.branches);
   const dispatch = useDispatch();
 
   const [payload, setPayload] = useState({
@@ -41,7 +41,7 @@ const AllAccounts = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchAllAccounts(payload));
+    dispatch(fetchAllbranchesStart(payload));
   }, [dispatch, payload]);
 
   const handlePagination = (event, value) => {
@@ -56,7 +56,7 @@ const AllAccounts = () => {
   return (
     <div>
       <Typography color="primary" variant="h5" my={2}>
-        All Accounts
+        Branches
       </Typography>
 
       <Grid container spacing={3} alignItems="center" justifyContent="center" mb={2}>
@@ -69,7 +69,7 @@ const AllAccounts = () => {
             name="name"
           />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={2}>
           <FormControl fullWidth>
             <InputLabel id="sort-by-label">Sort By</InputLabel>
             <Select
@@ -85,38 +85,45 @@ const AllAccounts = () => {
             </Select>
           </FormControl>
         </Grid>
+        <Grid item xs={12} md={2}>
+          <Link to="/branch/add">
+            <Button size="large" variant="contained">
+              Add new Branch
+            </Button>
+          </Link>
+        </Grid>
       </Grid>
 
-      {accounts?.length > 0 ? (
+      {branches?.length > 0 ? (
         <>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Date</TableCell>
-                  <TableCell>Account Number</TableCell>
-                  <TableCell>Name </TableCell>
-                  <TableCell>Branch</TableCell>
-                  <TableCell>Type</TableCell>
+                  <TableCell>Branch Name</TableCell>
+                  <TableCell>Email </TableCell>
+                  <TableCell>City</TableCell>
+                  <TableCell>IFSC</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {accounts?.map((account) => {
+                {branches?.map((branch) => {
                   return (
-                    <TableRow key={account.account_id}>
+                    <TableRow key={branch.branchId}>
                       <TableCell>
-                        {dayjs(account.createdAt).calendar(null, {
+                        {dayjs(branch.createdAt).calendar(null, {
                           sameElse: "DD/MM/YYYY h:mm A",
                         })}
                       </TableCell>
-                      <TableCell>{account.account_number}</TableCell>
-                      <TableCell>{`${account.user?.first_name} ${account.user?.last_name}`}</TableCell>
-                      <TableCell>{account.branch?.branch_name}</TableCell>
+                      <TableCell>{branch.branch_name}</TableCell>
+                      <TableCell>{branch.email}</TableCell>
+                      <TableCell>{branch.city}</TableCell>
 
-                      <TableCell>{account.account_type}</TableCell>
+                      <TableCell>{branch.IFSC}</TableCell>
                       <TableCell>
-                        <Link to={`/account-info/${account.user_id}`}>
+                        <Link to={`/branch-info/${branch.branchId}`}>
                           <Button variant="text">view/edit</Button>
                         </Link>
                       </TableCell>
@@ -153,4 +160,4 @@ const AllAccounts = () => {
   );
 };
 
-export default AllAccounts;
+export default AllBranches;

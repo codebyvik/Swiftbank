@@ -6,6 +6,8 @@ const InitialAccountState = {
   fetching: false,
   account: null,
   accounts: null,
+  totalPages: 0,
+  totalEntries: 0,
 };
 
 export const accountSlice = createSlice({
@@ -44,6 +46,15 @@ export const accountSlice = createSlice({
     fetchAllAccountsSuccess: (state, action) => {
       state.fetching = false;
       state.accounts = action.payload.accounts;
+      state.totalPages = action.payload.totalPages;
+      state.totalEntries = action.payload.totalEntries;
+    },
+    toggleAccountStart: (state) => {
+      state.fetching = true;
+    },
+    toggleAccountSuccess: (state, action) => {
+      state.fetching = false;
+      state.account = action.payload.account;
     },
   },
 });
@@ -57,5 +68,7 @@ export const {
   fetchDashboardStart,
   fetchdashboardSuccess,
   fetchDashboardError,
+  toggleAccountStart,
+  toggleAccountSuccess,
 } = accountSlice.actions;
 export default accountSlice.reducer;

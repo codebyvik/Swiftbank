@@ -133,7 +133,7 @@ const CustomerDashboard = () => {
         </Card>
       </Grid>
       <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-        <Link to="/send-mony">
+        <Link to="/send-money">
           <Button startIcon={<Payments />} variant="contained" color="primary" sx={{ mr: 2 }}>
             Send Money
           </Button>

@@ -4,7 +4,6 @@ import NotFound from "./utils/404_notFound";
 import Profile from "./pages/profile/profile";
 import AccountInfo from "./pages/accounts/account_info";
 import AllAccounts from "./pages/accounts/all_accounts";
-import Transaction from "./pages/transactions/transaction";
 import Transactions from "./pages/transactions/view_transactions";
 import CustomerDashboard from "./pages/dashboard/customer_dashboard";
 import AdminDashboard from "./pages/dashboard/admin_dashboard";
@@ -23,30 +22,37 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTheme } from "@mui/material";
 import { fetchUserStart } from "./redux/auth/auth.slice";
 import { SnackbarProvider } from "notistack";
-import { ProtectedRoute } from "./utils/protectedRoute";
+import {
+  ProtectedAdminRoute,
+  ProtectedCustomerRoute,
+  ProtectedRoute,
+} from "./utils/protectedRoute";
 import SimpleBackdrop from "./utils/backdrop";
+import InitiateTransaction from "./pages/transactions/initiate_transaction";
+import { toggleDarkMode } from "./redux/config.slice";
+import AllBranches from "./pages/branch/view_branches";
+import Branch from "./pages/branch/branch";
+import AddBranch from "./pages/branch/add_branch";
 
 function App() {
   const mode = useSelector((state) => state.config.mode);
+  const userMode = localStorage.getItem("mode");
   const { isAuthenticated, loading, user } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(toggleDarkMode(userMode));
     return () => dispatch(fetchUserStart());
+    // eslint-disable-next-line
   }, [dispatch]);
 
-  const customLightTheme = createTheme({
+  const customTheme = createTheme({
     palette: {
-      mode: "light",
+      mode: mode,
       primary: {
-        main: "#4774e6",
+        main: `${mode === "light" ? "#4774e6" : "#90caf9"}`,
       },
-    },
-  });
-  const customDarkTheme = createTheme({
-    palette: {
-      mode: "dark",
     },
   });
 
@@ -63,7 +69,7 @@ function App() {
   }));
 
   return (
-    <ThemeProvider theme={mode === "light" ? customLightTheme : customDarkTheme}>
+    <ThemeProvider theme={customTheme}>
       <CssBaseline />
       <SnackbarProvider
         maxSnack={3}
@@ -76,7 +82,7 @@ function App() {
       />
 
       <Router>
-        <Box sx={{ transition: "all 0.3s linear", display: "flex" }}>
+        <Box sx={{ display: "flex" }}>
           {user ? (
             <>
               <Navbar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
@@ -85,7 +91,7 @@ function App() {
           ) : (
             <></>
           )}
-          <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <Box component="main" sx={{ flexGrow: 1, maxWidth: { xs: "80%", md: "100%" }, p: 3 }}>
             {user ? <DrawerHeader /> : <></>}
             {loading && !isAuthenticated ? <SimpleBackdrop open /> : <></>}
             <Routes>
@@ -96,20 +102,26 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/profile" element={<Profile />}></Route>
                 <Route path="/transactions" element={<Transactions />}></Route>
-                <Route path="/transactions/:id" element={<Transaction />}></Route>
-                <Route path="/account/info" element={<AccountInfo />}></Route>
-                <Route path="/" element={<CustomerDashboard />}></Route>
+                <Route path="/account-info/:id" element={<AccountInfo />}></Route>
+                <Route
+                  path="/"
+                  element={user?.user_type === "admin" ? <AdminDashboard /> : <CustomerDashboard />}
+                ></Route>
+                {/* customer only routes */}
+                <Route element={<ProtectedCustomerRoute />}>
+                  <Route path="/send-money" element={<InitiateTransaction />}></Route>
+                  <Route path="/beneficiaries/:id" element={<Beneficiary />}></Route>
+                  <Route path="/beneficiaries" element={<ViewBeneficiaries />}></Route>
+                  <Route path="/beneficiaries/add" element={<AddBeneficiary />}></Route>
+                </Route>
+                {/* Admin only routes */}
+                <Route element={<ProtectedAdminRoute />}>
+                  <Route path="/accounts" element={<AllAccounts />}></Route>
+                  <Route path="/branch" element={<AllBranches />}></Route>
+                  <Route path="/branch-info/:id" element={<Branch />}></Route>
+                  <Route path="/branch/add" element={<AddBranch />}></Route>
+                </Route>
               </Route>
-
-              {/* customer only routes */}
-
-              <Route path="/beneficiaries/:id" element={<Beneficiary />}></Route>
-              <Route path="/beneficiaries" element={<ViewBeneficiaries />}></Route>
-              <Route path="/beneficiaries/add" element={<AddBeneficiary />}></Route>
-
-              {/* Admin only routes */}
-              <Route path="/accounts" element={<AllAccounts />}></Route>
-              <Route path="/admin/dashboard" element={<AdminDashboard />}></Route>
 
               <Route path="*" element={<NotFound />} />
             </Routes>
