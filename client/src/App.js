@@ -33,6 +33,7 @@ import { toggleDarkMode } from "./redux/config.slice";
 import AllBranches from "./pages/branch/view_branches";
 import Branch from "./pages/branch/branch";
 import AddBranch from "./pages/branch/add_branch";
+import Success from "./pages/transactions/__success";
 
 function App() {
   const mode = useSelector((state) => state.config.mode);
@@ -91,7 +92,10 @@ function App() {
           ) : (
             <></>
           )}
-          <Box component="main" sx={{ flexGrow: 1, maxWidth: { xs: "80%", md: "100%" }, p: 3 }}>
+          <Box
+            component="main"
+            sx={{ flexGrow: 1, maxWidth: { xs: "80%", md: "100%" }, p: 3, margin: "auto" }}
+          >
             {user ? <DrawerHeader /> : <></>}
             {loading && !isAuthenticated ? <SimpleBackdrop open /> : <></>}
             <Routes>
@@ -110,6 +114,7 @@ function App() {
                 {/* customer only routes */}
                 <Route element={<ProtectedCustomerRoute />}>
                   <Route path="/send-money" element={<InitiateTransaction />}></Route>
+                  <Route path="/send-money/success/:id" element={<Success />}></Route>
                   <Route path="/beneficiaries/:id" element={<Beneficiary />}></Route>
                   <Route path="/beneficiaries" element={<ViewBeneficiaries />}></Route>
                   <Route path="/beneficiaries/add" element={<AddBeneficiary />}></Route>

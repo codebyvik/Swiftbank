@@ -124,52 +124,56 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
           </ListItemButton>
         </ListItem>
 
-        <ListItem onClick={() => navigate("/accounts")} disablePadding sx={{ display: "block" }}>
-          <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: openSidebar ? "initial" : "center",
-              px: 2.5,
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                minWidth: 0,
-                mr: openSidebar ? 3 : "auto",
-                justifyContent: "center",
-              }}
-            >
-              <PeopleAlt />
-            </ListItemIcon>
-            <ListItemText primary={"All Accounts"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem onClick={() => navigate("/branch")} disablePadding sx={{ display: "block" }}>
-          <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: openSidebar ? "initial" : "center",
-              px: 2.5,
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                minWidth: 0,
-                mr: openSidebar ? 3 : "auto",
-                justifyContent: "center",
-              }}
-            >
-              <AccountTree />
-            </ListItemIcon>
-            <ListItemText primary={"All branches"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-          </ListItemButton>
-        </ListItem>
-
         {user && user.user_type === "admin" ? (
-          <></>
+          <>
+            <ListItem
+              onClick={() => navigate("/accounts")}
+              disablePadding
+              sx={{ display: "block" }}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: openSidebar ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: openSidebar ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <PeopleAlt />
+                </ListItemIcon>
+                <ListItemText primary={"All Accounts"} sx={{ opacity: openSidebar ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem onClick={() => navigate("/branch")} disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: openSidebar ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: openSidebar ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <AccountTree />
+                </ListItemIcon>
+                <ListItemText primary={"All branches"} sx={{ opacity: openSidebar ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          </>
         ) : (
           <ListItem
-            onClick={() => navigate("/account/info")}
+            onClick={() => navigate(`/account-info/${user?.id}`)}
             disablePadding
             sx={{ display: "block" }}
           >

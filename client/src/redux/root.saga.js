@@ -12,7 +12,11 @@ import {
   watchFetchDashboardStart,
   watchfetchAccountStart,
 } from "./accounts/account.saga";
-import { watchFetchTransactionStart } from "./transactions/transactions.saga";
+import {
+  WatchAddMoneyStart,
+  WatchAddTransactionStart,
+  watchFetchTransactionStart,
+} from "./transactions/transactions.saga";
 import {
   WatchAddBranchStart,
   WatchDeletebranchStart,
@@ -20,6 +24,13 @@ import {
   WatchUpdateBranchStart,
   watchFetchAllbranchesStart,
 } from "./branches/branches.saga";
+import {
+  WatchAddBeneficiaryStart,
+  WatchDeleteBeneficiaryStart,
+  WatchFetchBeneficiaryStart,
+  WatchUpdateBeneficiaryStart,
+  watchFetchAllBeneficiariesStart,
+} from "./beneficiaries/beneficiaries.saga";
 
 export default function* rootSaga() {
   yield all([
@@ -38,6 +49,13 @@ export default function* rootSaga() {
     WatchDeletebranchStart(),
     WatchAddBranchStart(),
     WatchUpdateBranchStart(),
+    watchFetchAllBeneficiariesStart(),
+    WatchAddBeneficiaryStart(),
+    WatchFetchBeneficiaryStart(),
+    WatchUpdateBeneficiaryStart(),
+    WatchDeleteBeneficiaryStart(),
+    WatchAddTransactionStart(),
+    WatchAddMoneyStart(),
   ]);
 
   // code after all-effect

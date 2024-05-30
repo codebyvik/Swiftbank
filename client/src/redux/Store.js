@@ -12,11 +12,17 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ["user/UpdateUserStart"],
-        // Ignore these field paths in all actions
-        ignoredActionPaths: ["payload.timestamp"],
+        ignoredActions: [
+          "user/UpdateUserStart",
+          "transactions/addTransactionStart",
+          "transactions/addMoneyStart",
+        ],
         // Ignore these paths in the state
-        ignoredPaths: ["user/UpdateUserStart"],
+        ignoredPaths: [
+          "user/UpdateUserStart",
+          "transactions/addTransactionStart",
+          "transactions/addMoneyStart",
+        ],
       },
     }).concat([sagaMiddleware, logger]),
   devTools: process.env.NODE_ENV !== "production",

@@ -164,7 +164,7 @@ const Navbar = ({ openSidebar, setOpenSidebar }) => {
           ) : (
             <MenuItem
               onClick={(e) => {
-                navigate("/account/info");
+                navigate(`/account-info/${user?.id}`);
                 handleClose();
               }}
             >

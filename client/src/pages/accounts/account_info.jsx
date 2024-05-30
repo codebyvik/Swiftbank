@@ -124,23 +124,32 @@ function AccountInfo() {
 
               <Stack direction="row" alignItems="center" gap={2} sx={{ my: 2 }}>
                 <Typography variant="h6">Account Status :</Typography>
-                <Typography
-                  variant="subtitle"
-                  component="p"
-                  color={account?.user?.isActive ? "green" : "red"}
-                >
-                  {account.user.isActive ? "Active" : "Deactive"}
-                </Typography>
+
                 {user && user.user_type === "admin" ? (
-                  <Button
-                    onClick={handleUserStatusToggle}
-                    variant="contained"
-                    color={account?.user?.isActive ? "error" : "success"}
-                  >
-                    {account?.user?.isActive ? "Deactivate" : "Activate"}
-                  </Button>
+                  <>
+                    <Typography
+                      variant="subtitle"
+                      component="p"
+                      color={account?.user?.isActive ? "green" : "red"}
+                    >
+                      {account?.user?.isActive ? "Active" : "Deactive"}
+                    </Typography>
+                    <Button
+                      onClick={handleUserStatusToggle}
+                      variant="contained"
+                      color={account?.user?.isActive ? "error" : "success"}
+                    >
+                      {account?.user?.isActive ? "Deactivate" : "Activate"}
+                    </Button>
+                  </>
                 ) : (
-                  <></>
+                  <Typography
+                    variant="subtitle"
+                    component="p"
+                    color={user?.isActive ? "green" : "red"}
+                  >
+                    {user?.isActive ? "Active" : "Deactive"}
+                  </Typography>
                 )}
               </Stack>
             </Box>

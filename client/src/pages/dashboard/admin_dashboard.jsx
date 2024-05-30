@@ -41,7 +41,7 @@ const AdminDashboard = () => {
       <Grid item xs={12}>
         <Card>
           <CardContent>
-            <Typography variant="h5" my={2}>
+            <Typography color="primary" variant="h5" my={2}>
               All accounts
             </Typography>
             {/* Replace with dynamic data */}
@@ -88,7 +88,7 @@ const AdminDashboard = () => {
       <Grid item xs={12}>
         <Card>
           <CardContent>
-            <Typography variant="h5" my={2}>
+            <Typography color="primary" variant="h5" my={2}>
               Recent Transactions
             </Typography>
             {/* Replace with dynamic data */}
@@ -97,7 +97,7 @@ const AdminDashboard = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Date</TableCell>
-                    <TableCell>Description</TableCell>
+                    <TableCell align="center">Description</TableCell>
                     <TableCell>Amount</TableCell>
                     <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>From</TableCell>
                     <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>To</TableCell>
@@ -114,7 +114,9 @@ const AdminDashboard = () => {
                             sameElse: "DD/MM/YYYY h:mm A",
                           })}
                         </TableCell>
-                        <TableCell width="400px">{transaction.description}</TableCell>
+                        <TableCell align="center" width="400px">
+                          {transaction.description}
+                        </TableCell>
                         <TableCell>
                           <CurrencyRupee /> {transaction.amount_transferred}
                         </TableCell>
@@ -126,14 +128,23 @@ const AdminDashboard = () => {
                           {`${transaction?.To_account_id?.user?.first_name} 
                           ${transaction?.To_account_id?.user?.last_name}`}
                         </TableCell>
-                        <TableCell>
-                          {transaction.from_account_id === transaction.to_account_id
-                            ? "Self Transfer"
-                            : user.id === transaction.from_account_id &&
-                              user.id !== transaction.to_account_id
-                            ? "Credit"
-                            : "Debit"}
-                        </TableCell>
+
+                        {user && user.user_type === "admin" ? (
+                          <TableCell>
+                            {transaction.from_account_id === transaction.to_account_id
+                              ? "Self Transfer"
+                              : "Credit/Debit"}
+                          </TableCell>
+                        ) : (
+                          <TableCell>
+                            {transaction.from_account_id === transaction.to_account_id
+                              ? "Self Transfer"
+                              : user.id === transaction.from_account_id &&
+                                user.id !== transaction.to_account_id
+                              ? "Credit"
+                              : "Debit"}
+                          </TableCell>
+                        )}
                       </TableRow>
                     );
                   })}

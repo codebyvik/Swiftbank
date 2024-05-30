@@ -36,8 +36,6 @@ function Row(props) {
   // format date
   dayjs.extend(calendar);
 
-  dayjs().calendar();
-
   return (
     <>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -53,6 +51,7 @@ function Row(props) {
         </TableCell>
         <TableCell
           width="400"
+          align="center"
           sx={{ textOverflow: "ellipsis", display: { xs: "none", sm: "table-cell" } }}
         >
           {transaction.description}
@@ -68,13 +67,21 @@ function Row(props) {
           {`${transaction?.To_account_id?.user?.first_name} 
                           ${transaction?.To_account_id?.user?.last_name}`}
         </TableCell>
-        <TableCell>
-          {transaction.from_account_id === transaction.to_account_id
-            ? "Self Transfer"
-            : user.id === transaction.from_account_id && user.id !== transaction.to_account_id
-            ? "Credit"
-            : "Debit"}
-        </TableCell>
+        {user && user.user_type === "admin" ? (
+          <TableCell>
+            {transaction.from_account_id === transaction.to_account_id
+              ? "Self Transfer"
+              : "Credit/Debit"}
+          </TableCell>
+        ) : (
+          <TableCell>
+            {transaction.from_account_id === transaction.to_account_id
+              ? "Self Transfer"
+              : user.id === transaction.from_account_id && user.id !== transaction.to_account_id
+              ? "Credit"
+              : "Debit"}
+          </TableCell>
+        )}
       </TableRow>
 
       <TableRow>
@@ -97,9 +104,10 @@ function Row(props) {
                     <TableCell component="th" scope="row">
                       {transaction.transaction_id}
                     </TableCell>
-                    <TableCell>{transaction?.To_account_id?.account_number}</TableCell>
+
+                    <TableCell>{transaction?.From_account_id?.account_number}</TableCell>
                     <TableCell align="right">
-                      {transaction?.From_account_id?.account_number}
+                      {transaction?.To_account_id?.account_number}
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -219,7 +227,11 @@ function Transactions() {
                 <TableRow>
                   <TableCell />
                   <TableCell>Date</TableCell>
-                  <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }} width="400">
+                  <TableCell
+                    align="center"
+                    sx={{ display: { xs: "none", sm: "table-cell" } }}
+                    width="400"
+                  >
                     Description
                   </TableCell>
                   <TableCell>Amount</TableCell>

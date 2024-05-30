@@ -25,14 +25,26 @@ const transactionSlice = createSlice({
     },
     fetchTransactionsSuccessfull: (state, action) => {
       state.fetching = false;
-      state.transactions = action.payload.transactions;
-      state.totalPages = action.payload?.totalPages;
-      state.totalEntries = action.payload?.totalEntries;
+      state.transaction = action?.payload?.transaction;
+      state.transactions = action?.payload?.transactions;
+      state.totalPages = action?.payload?.totalPages;
+      state.totalEntries = action?.payload?.totalEntries;
+    },
+    addTransactionStart: (state) => {
+      state.fetching = true;
+    },
+    addMoneyStart: (state) => {
+      state.fetching = true;
     },
   },
 });
 
-export const { fetchTransactionStart, fetchTransactionError, fetchTransactionsSuccessfull } =
-  transactionSlice.actions;
+export const {
+  fetchTransactionStart,
+  fetchTransactionError,
+  fetchTransactionsSuccessfull,
+  addTransactionStart,
+  addMoneyStart,
+} = transactionSlice.actions;
 
 export default transactionSlice.reducer;

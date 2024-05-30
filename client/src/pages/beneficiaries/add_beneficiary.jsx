@@ -1,80 +1,80 @@
 import React, { useState } from "react";
-import { Typography, TextField, Button, Grid } from "@mui/material";
+import { Typography, TextField, Button, Grid, Box, Card } from "@mui/material";
+import AlertUser from "../../utils/show_alert";
+import { useDispatch } from "react-redux";
+import { addBeneficiaryStart } from "../../redux/beneficiaries/beneficiaries.slice";
 
 function AddBeneficiary() {
+  const dispatch = useDispatch();
   const [beneficiary, setBeneficiary] = useState({
     name: "",
-    accountNumber: "",
-    bankName: "",
-    ifscCode: "",
-    nickname: "",
+    bank_name: "SwiftBank",
+    account_number: "",
+    transfer_limit: "",
   });
 
   const handleChange = (e) => {
-    setBeneficiary({ ...beneficiary, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setBeneficiary({ ...beneficiary, [name]: value });
   };
 
   const handleSubmit = () => {
-    // Handle form submission
-    console.log(beneficiary);
+    for (const item in beneficiary) {
+      if (!beneficiary[item]) {
+        return AlertUser("Fill all fields", "error");
+      }
+    }
+    dispatch(addBeneficiaryStart(beneficiary));
   };
 
   return (
-    <div>
-      <Typography variant="h4">Add Beneficiary</Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <TextField
-            label="Name"
-            name="name"
-            value={beneficiary.name}
-            onChange={handleChange}
-            fullWidth
-          />
+    <Box sx={{ width: { xs: "100%", md: "60%" }, margin: "auto" }}>
+      <Typography variant="h4" color="primary" my={3}>
+        Add Beneficiary
+      </Typography>
+      <Card sx={{ p: 3 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <TextField
+              label="Nick Name"
+              name="name"
+              value={beneficiary.name}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              type="text"
+              label="Account Number"
+              name="account_number"
+              maxLength={12}
+              value={beneficiary.account_number}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField label="Bank Name" value={beneficiary.bank_name} fullWidth disabled />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Transfer Limit"
+              name="transfer_limit"
+              value={beneficiary.transfer_limit}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+
+          <Grid item xs={12} display="flex" justifyContent="flex-end">
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+              Add Beneficiary
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Account Number"
-            name="accountNumber"
-            value={beneficiary.accountNumber}
-            onChange={handleChange}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Bank Name"
-            name="bankName"
-            value={beneficiary.bankName}
-            onChange={handleChange}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="IFSC Code"
-            name="ifscCode"
-            value={beneficiary.ifscCode}
-            onChange={handleChange}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label="Nickname"
-            name="nickname"
-            value={beneficiary.nickname}
-            onChange={handleChange}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Add Beneficiary
-          </Button>
-        </Grid>
-      </Grid>
-    </div>
+      </Card>
+    </Box>
   );
 }
 

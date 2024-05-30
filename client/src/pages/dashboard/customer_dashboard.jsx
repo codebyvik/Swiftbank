@@ -12,7 +12,7 @@ import {
   Table,
   TableHead,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDashboardStart } from "../../redux/accounts/account.slice";
 import { ArrowForward, CurrencyRupee, Groups, Payments } from "@mui/icons-material";
@@ -20,6 +20,7 @@ import Title from "../../utils/Page_title";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import { Link } from "react-router-dom";
+import AddMoney from "../transactions/__add_money";
 
 const CustomerDashboard = () => {
   Title("Dashboard");
@@ -36,7 +37,11 @@ const CustomerDashboard = () => {
 
   dayjs().calendar();
 
-  console.log("account", account);
+  const [AddModal, setAddModal] = useState(false);
+
+  const handleModal = () => {
+    setAddModal(true);
+  };
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -44,7 +49,7 @@ const CustomerDashboard = () => {
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
-                <Typography variant="h5">
+                <Typography color="primary" variant="h5">
                   Account Balance: <CurrencyRupee /> {account?.balance}
                 </Typography>
               </Grid>
@@ -57,7 +62,13 @@ const CustomerDashboard = () => {
                 xs={12}
                 md={6}
               >
-                <Link to="/account/info">
+                <Button onClick={handleModal} variant="contained">
+                  Add money
+                </Button>
+
+                <AddMoney openModal={AddModal} setopenModel={setAddModal} />
+
+                <Link to={`/account-info/${user?.id}`}>
                   <Button variant="text">
                     View account info <ArrowForward />
                   </Button>
@@ -70,7 +81,7 @@ const CustomerDashboard = () => {
       <Grid item xs={12}>
         <Card>
           <CardContent>
-            <Typography variant="h5" my={2}>
+            <Typography color="primary" variant="h5" my={2}>
               Recent Transactions
             </Typography>
             {/* Replace with dynamic data */}
@@ -79,7 +90,7 @@ const CustomerDashboard = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Date</TableCell>
-                    <TableCell>Description</TableCell>
+                    <TableCell align="center">Description</TableCell>
                     <TableCell>Amount</TableCell>
                     <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>From</TableCell>
                     <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>To</TableCell>
@@ -96,7 +107,9 @@ const CustomerDashboard = () => {
                             sameElse: "DD/MM/YYYY h:mm A",
                           })}
                         </TableCell>
-                        <TableCell width="400px">{transaction.description}</TableCell>
+                        <TableCell align="center" width="400px">
+                          {transaction.description}
+                        </TableCell>
                         <TableCell>
                           <CurrencyRupee /> {transaction.amount_transferred}
                         </TableCell>
@@ -110,7 +123,7 @@ const CustomerDashboard = () => {
                         </TableCell>
                         <TableCell>
                           {transaction.from_account_id === transaction.to_account_id
-                            ? "Self Transfer"
+                            ? "Deposit"
                             : user.id === transaction.from_account_id &&
                               user.id !== transaction.to_account_id
                             ? "Credit"
