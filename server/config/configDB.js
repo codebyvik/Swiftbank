@@ -11,6 +11,12 @@ module.exports = {
       useUTC: false, // for reading from database
     },
     timezone: "+05:30",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   },
   test: {
     username: process.env.DATABASE_USER,
@@ -22,6 +28,12 @@ module.exports = {
       useUTC: false, // for reading from database
     },
     timezone: "+05:30",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   },
   production: {
     username: process.env.DATABASE_USER,
@@ -33,5 +45,11 @@ module.exports = {
       useUTC: false, // for reading from database
     },
     timezone: "+05:30",
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   },
 };

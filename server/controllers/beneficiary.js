@@ -5,16 +5,20 @@ const Beneficiary = require("../db/models/beneficiaries");
 
 const catchAsyncError = require("../utils/catchAsyncError");
 const AppError = require("../utils/AppError");
+const { Op } = require("sequelize");
 
 module.exports.addBenefeciary = catchAsyncError(async (req, res, next) => {
   const { name, bank_name, account_number, transfer_limit } = req.body;
 
   try {
-    if (req.params.id != req.user.id || req.user.user_type != "customer") {
+    if (req.user.user_type != "customer") {
       return next(new AppError("Not authorised", 401));
     }
 
-    const account = await Accounts.findOne({ where: { account_number: account_number } });
+    const account = await Accounts.findOne({
+      where: { account_number: account_number },
+      include: User,
+    });
 
     if (!account) {
       return next(new AppError("Account doesn't exist", 404));
@@ -22,6 +26,10 @@ module.exports.addBenefeciary = catchAsyncError(async (req, res, next) => {
 
     if (account.user_id === req.user.id) {
       return next(new AppError("you can't add your account as beneficiary", 404));
+    }
+
+    if (!account.user.isActive) {
+      return next(new AppError("Benificiary account is deactive", 404));
     }
 
     const checkBeneficiary = await Beneficiary.findOne({
@@ -40,9 +48,6 @@ module.exports.addBenefeciary = catchAsyncError(async (req, res, next) => {
       transfer_limit,
     });
 
-    //  customer_id = user
-    //  transfer_limit = set it here
-
     return res.status(200).json({
       status: "success",
       message: "beneficiary added successfully",
@@ -54,21 +59,56 @@ module.exports.addBenefeciary = catchAsyncError(async (req, res, next) => {
   }
 });
 
-module.exports.getAllBeneficiaries = catchAsyncError(async (req, res, next) => {
+module.exports.getBeneficiaryDetails = catchAsyncError(async (req, res, next) => {
   try {
     if (req.user.user_type != "customer") {
       return next(new AppError("Not authorised", 401));
     }
-    const beneficiaries = await Beneficiary.findAll({ where: { customer_id: req.user.id } });
+
+    const beneficiary = await Beneficiary.findOne({
+      where: { customer_id: req.user.id, beneficiary_id: req.params.id },
+    });
+
+    if (!beneficiary) {
+      return next(new AppError("benificiary not found", 404));
+    }
+
+    return res.status(200).json({ status: "success", message: "beneficiary fetched", beneficiary });
+  } catch (error) {
+    console.log("Error while fetching beneficiary details", error);
+    return next(new AppError("Error while fetching beneficiary details", 404));
+  }
+});
+
+module.exports.getAllBeneficiaries = catchAsyncError(async (req, res, next) => {
+  const page = req.query.page || 1; // current page
+  const limit = 3; // limit is set to 10
+  const offset = (parseInt(page) - 1) * limit; // calculate how many to skip
+  //   sorting , by default descending
+  const order = req.query.sort || "DESC";
+  const name = req.query.name || "";
+
+  try {
+    if (req.user.user_type != "customer") {
+      return next(new AppError("Not authorised", 401));
+    }
+    const beneficiaries = await Beneficiary.findAndCountAll({
+      offset,
+      limit,
+      order: [["createdAt", order]],
+      where: { [Op.and]: [{ customer_id: req.user.id }, { name: { [Op.iLike]: `%${name}%` } }] },
+    });
 
     return res.status(200).json({
       status: "success",
       message: "beneficiaries fetched successfully",
-      beneficiaries,
+      totalPages: Math.ceil(beneficiaries?.count / limit),
+      totalEntries: beneficiaries?.count,
+      beneficiaries: beneficiaries?.rows,
     });
   } catch (error) {
-    console.log("Error while adding beneficiary", error);
-    return next(new AppError("Error while adding beneficiary", 404));
+    console.log("Error while fetching all beneficiaries", error);
+    return next(new AppError("Error while fetching all beneficiaries", 404));
   }
 });
 
