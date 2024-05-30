@@ -9,9 +9,9 @@ import {
   Divider,
   Stack,
 } from "@mui/material";
-import { AccountBalance, CurrencyRupee } from "@mui/icons-material/";
+import { AccountBalance, CurrencyRupee, LockReset } from "@mui/icons-material/";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { fetchAccountStart, toggleAccountStart } from "../../redux/accounts/account.slice";
 import dayjs from "dayjs";
 
@@ -86,9 +86,9 @@ function AccountInfo() {
                   </Typography>
                 </Stack>
                 <Stack direction="row" alignItems="center" gap={2} sx={{ my: 2 }}>
-                  <Typography variant="h6"> Profession : </Typography>
+                  <Typography variant="h6"> Occupation : </Typography>
                   <Typography variant="subtitle" component="p" fontSize={18}>
-                    {account.user.user_profession}
+                    {account.user.user_occupation}
                   </Typography>
                 </Stack>
                 <Stack direction="row" alignItems="center" gap={2} sx={{ my: 2 }}>
@@ -194,6 +194,15 @@ function AccountInfo() {
                 </Typography>
               </Stack>
             </Box>
+
+            <Link
+              to="/reset-pin"
+              style={{ display: "flex", justifyContent: "flex-end", textDecoration: "none" }}
+            >
+              <Button startIcon={<LockReset />} variant="contained" color="primary" sx={{ mr: 2 }}>
+                Reset PIN
+              </Button>
+            </Link>
           </CardContent>
         ) : (
           <>

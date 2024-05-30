@@ -103,7 +103,7 @@ module.exports = {
             },
           },
         },
-        user_profession: {
+        user_occupation: {
           allowNull: false,
           type: Sequelize.ENUM("salaried", "student", "unemployed", "others", "self employed"),
           validate: {

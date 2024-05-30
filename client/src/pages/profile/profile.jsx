@@ -61,7 +61,7 @@ const Profile = () => {
     user_gender: "",
     nationality: "",
     user_dateOfBirth: "",
-    user_profession: "",
+    user_occupation: "",
     user_maritalStatus: "",
     city: "",
     street: "",
@@ -86,7 +86,7 @@ const Profile = () => {
         user_gender: user.user_gender,
         nationality: user.nationality,
         user_dateOfBirth: dayjs(user.user_dateOfBirth),
-        user_profession: user.user_profession,
+        user_occupation: user.user_occupation,
         user_maritalStatus: user.user_maritalStatus,
         city: user.city,
         street: user.street,
@@ -346,13 +346,13 @@ const Profile = () => {
                       </Grid>
                       <Grid item xs={12} md={6}>
                         <FormControl sx={{ width: "100%" }}>
-                          <InputLabel id="user_profession_label">Profession</InputLabel>
+                          <InputLabel id="user_occupation_label">Occupation</InputLabel>
                           <Select
-                            labelId="user_profession_label"
-                            id="user_profession"
-                            value={profile.user_profession}
-                            name="user_profession"
-                            label="Profession"
+                            labelId="user_occupation_label"
+                            id="user_occupation"
+                            value={profile.user_occupation}
+                            name="user_occupation"
+                            label="Occupation"
                             onChange={handleChange}
                           >
                             <MenuItem disabled value="">

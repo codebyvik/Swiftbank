@@ -8,17 +8,21 @@ const User = require("../db/models/user");
 
 // update transaction pin
 module.exports.updateTransactionPin = catchAsyncError(async (req, res, next) => {
+  const { current_PIN, new_PIN } = req.body;
   try {
     // if user is admin throw error
     if (req.user.user_type != "customer") {
       return next(new AppError("should be a customer to update pin", 401));
     }
 
+    // check if current pin and old pin matches
+    const account = await Accounts.findOne({ where: { user_id: req.user.id } });
+
+    if (account?.transaction_PIN !== current_PIN) {
+      return next(new AppError("new pin and previous pin doesn't match", 404));
+    }
     // update the pin and send success message
-    await Accounts.update(
-      { transaction_PIN: req.body.transaction_PIN },
-      { where: { user_id: req.user.id } }
-    );
+    await Accounts.update({ transaction_PIN: new_PIN }, { where: { user_id: req.user.id } });
 
     return res.status(200).json({
       status: "success",

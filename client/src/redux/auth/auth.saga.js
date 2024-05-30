@@ -120,3 +120,20 @@ function* resetPassword({ payload }) {
 export function* watchResetpassword() {
   yield takeLatest("user/resetpassword", resetPassword);
 }
+
+function* resetPIN({ payload }) {
+  try {
+    yield axios.post(`http://localhost:8000/api/v1/account/update-pin`, payload);
+    AlertUser("PIN has been reset", "success");
+    setTimeout(() => {
+      window.location.replace("http://localhost:3000/");
+    }, 3000);
+  } catch (error) {
+    AlertUser(error.response.data.message, "error");
+    yield put(fetchUserError(error.response.data));
+  }
+}
+
+export function* watchResetPIN() {
+  yield takeLatest("user/resetPIN", resetPIN);
+}

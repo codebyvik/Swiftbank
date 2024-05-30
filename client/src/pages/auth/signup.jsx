@@ -70,7 +70,7 @@ const SignUp = () => {
     user_gender: "",
     nationality: "",
     user_dateOfBirth: "",
-    user_profession: "",
+    user_occupation: "",
     user_maritalStatus: "",
     city: "",
     street: "",
@@ -280,7 +280,7 @@ const SignUp = () => {
                   value={credentials.email}
                   onChange={handleChange}
                 />
-                {/* gender , nationality , DOB ,profession */}
+                {/* gender , nationality , DOB ,user_occupation */}
                 <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between" }}>
                   <FormControl sx={{ width: "45%", my: 1 }}>
                     <InputLabel id="user_gender_label">Gender</InputLabel>
@@ -332,13 +332,13 @@ const SignUp = () => {
                     </LocalizationProvider>
                   </FormControl>
                   <FormControl sx={{ width: "45%", my: 1 }}>
-                    <InputLabel id="user_profession_label">Profession</InputLabel>
+                    <InputLabel id="user_occupation_label">Occupation</InputLabel>
                     <Select
-                      labelId="user_profession_label"
-                      id="user_profession"
-                      value={credentials.user_profession}
-                      name="user_profession"
-                      label="Profession"
+                      labelId="user_occupation_label"
+                      id="user_occupation"
+                      value={credentials.user_occupation}
+                      name="user_occupation"
+                      label="Occupation"
                       onChange={handleChange}
                     >
                       <MenuItem disabled value="">

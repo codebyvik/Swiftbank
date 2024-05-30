@@ -36,6 +36,7 @@ import AddBranch from "./pages/branch/add_branch";
 import Success from "./pages/transactions/__success";
 import ResetPassword from "./pages/auth/reset_password";
 import ForgotPassword from "./pages/auth/forgot_password";
+import ResetPin from "./pages/auth/reset_PIN";
 
 function App() {
   const mode = useSelector((state) => state.config.mode);
@@ -122,6 +123,7 @@ function App() {
                   <Route path="/beneficiaries/:id" element={<Beneficiary />}></Route>
                   <Route path="/beneficiaries" element={<ViewBeneficiaries />}></Route>
                   <Route path="/beneficiaries/add" element={<AddBeneficiary />}></Route>
+                  <Route path="/reset-pin" element={<ResetPin />}></Route>
                 </Route>
                 {/* Admin only routes */}
                 <Route element={<ProtectedAdminRoute />}>

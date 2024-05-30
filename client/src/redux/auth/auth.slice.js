@@ -47,6 +47,9 @@ export const userSlice = createSlice({
     resetpassword: (state) => {
       return (state = initialUserState);
     },
+    resetPIN: (state) => {
+      return state;
+    },
   },
 });
 
@@ -61,6 +64,7 @@ export const {
   UpdateUserStart,
   sendresetLink,
   resetpassword,
+  resetPIN,
 } = userSlice.actions;
 
 export default userSlice.reducer;

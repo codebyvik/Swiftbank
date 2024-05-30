@@ -2,6 +2,7 @@ import { all } from "redux-saga/effects";
 import {
   currentUser,
   signinUser,
+  watchResetPIN,
   watchResetpassword,
   watchSendresetLink,
   watchSignUpUserStart,
@@ -60,6 +61,7 @@ export default function* rootSaga() {
     WatchAddMoneyStart(),
     watchResetpassword(),
     watchSendresetLink(),
+    watchResetPIN(),
   ]);
 
   // code after all-effect

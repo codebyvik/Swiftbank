@@ -107,7 +107,7 @@ const user = sequelize.define(
         },
       },
     },
-    user_profession: {
+    user_occupation: {
       allowNull: false,
       type: DataTypes.ENUM("salaried", "student", "unemployed", "others", "self employed"),
       validate: {
