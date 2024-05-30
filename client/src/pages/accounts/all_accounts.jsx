@@ -54,7 +54,7 @@ const AllAccounts = () => {
   };
 
   return (
-    <div>
+    <Box sx={{ width: { xs: "100%", lg: "70%" }, margin: "auto" }}>
       <Typography color="primary" variant="h5" my={2}>
         All Accounts
       </Typography>
@@ -149,7 +149,7 @@ const AllAccounts = () => {
           <Typography>No Accounts found</Typography>
         </Card>
       )}
-    </div>
+    </Box>
   );
 };
 

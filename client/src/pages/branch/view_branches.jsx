@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import { Link } from "react-router-dom";
 import { fetchAllbranchesStart } from "../../redux/branches/branches.slice";
+import { Add } from "@mui/icons-material";
 
 // format date
 dayjs.extend(calendar);
@@ -54,7 +55,7 @@ const AllBranches = () => {
   };
 
   return (
-    <div>
+    <Box sx={{ width: { xs: "100%", lg: "70%" }, margin: "auto" }}>
       <Typography color="primary" variant="h5" my={2}>
         Branches
       </Typography>
@@ -87,8 +88,8 @@ const AllBranches = () => {
         </Grid>
         <Grid item xs={12} md={2}>
           <Link to="/branch/add">
-            <Button size="large" variant="contained">
-              Add new Branch
+            <Button startIcon={<Add />} variant="contained">
+              Add Branch
             </Button>
           </Link>
         </Grid>
@@ -156,7 +157,7 @@ const AllBranches = () => {
           <Typography>No Accounts found</Typography>
         </Card>
       )}
-    </div>
+    </Box>
   );
 };
 

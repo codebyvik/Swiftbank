@@ -13,7 +13,7 @@ import {
   styled,
   Divider,
 } from "@mui/material";
-import { CloudUpload } from "@mui/icons-material";
+import { CloudUpload, Save } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
 import { UpdateUserStart } from "../../redux/auth/auth.slice";
 
@@ -249,7 +249,7 @@ const Profile = () => {
                 startIcon={<CloudUpload />}
                 onChange={handleAvatarChange}
               >
-                Upload file
+                Select file
                 <VisuallyHiddenInput type="file" accept="image/png, image/jpeg " />
               </Button>
             </Box>
@@ -537,6 +537,7 @@ const Profile = () => {
                       type="submit"
                       variant="contained"
                       color="primary"
+                      startIcon={<Save />}
                     >
                       Update
                     </Button>

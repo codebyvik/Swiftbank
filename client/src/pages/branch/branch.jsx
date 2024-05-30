@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { Button, TextField, Grid, Typography, Box, FormControl, Divider } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Grid,
+  Typography,
+  Box,
+  FormControl,
+  Divider,
+  Card,
+} from "@mui/material";
 import { Delete, Done } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -116,7 +125,7 @@ const Branch = () => {
       return newData;
     }
 
-    AlertUser("Nothing to update", "error");
+    AlertUser("Nothing to update", "warning");
 
     return null;
   };
@@ -145,165 +154,167 @@ const Branch = () => {
           {openModal ? <DeleteModal openModal={openModal} setopenModel={setopenModel} /> : <></>}
 
           {/* PROFILE DETAILS */}
-          <Box sx={{ boxShadow: 2, padding: 2 }}>
-            <form noValidate onSubmit={handleSubmit}>
-              <Divider sx={{ mb: 2 }}>Branch details</Divider>
-              <Grid container spacing={2} marginTop={1}>
-                <Grid item xs={12} md={6}>
-                  {/* Email */}
-                  <TextField
-                    variant="outlined"
-                    required
-                    id="branch_name"
-                    label="Branch Name"
-                    name="branch_name"
-                    type="text"
-                    value={branchDetails.branch_name}
-                    onChange={handleChange}
-                    sx={{ width: "100%" }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  {/* Email */}
-                  <TextField
-                    variant="outlined"
-                    required
-                    id="IFSC"
-                    label="IFSC Code"
-                    name="IFSC"
-                    type="text"
-                    value={branchDetails.IFSC}
-                    onChange={handleChange}
-                    sx={{ width: "100%" }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <MuiTelInput
-                    value={phoneNo}
-                    onChange={(value, info) => {
-                      setPhoneNo(value);
-                      branchDetails.phone_pin = parseInt(info.countryCallingCode);
-                      branchDetails.phone_number = info.nationalNumber;
-                    }}
-                    name="phone_number"
-                    label="Phone Number"
-                    placeholder="+91 1234567890"
-                    required
-                    id="phone_number"
-                    sx={{ width: "100%" }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  {/* Email */}
-                  <TextField
-                    variant="outlined"
-                    required
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    type="email"
-                    value={branchDetails.email}
-                    onChange={handleChange}
-                    sx={{ width: "100%" }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Divider sx={{ my: 4 }}>Address</Divider>
-
-              <FormControl sx={{ width: "100%" }}>
-                {/* Address */}
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
+          <Card>
+            <Box sx={{ boxShadow: 2, padding: 2 }}>
+              <form noValidate onSubmit={handleSubmit}>
+                <Divider sx={{ mb: 2 }}>Branch details</Divider>
+                <Grid container spacing={2} marginTop={1}>
+                  <Grid item xs={12} md={6}>
+                    {/* Email */}
                     <TextField
-                      sx={{ width: "100%" }}
-                      name="street"
-                      label="street"
-                      type="text"
-                      id="street"
-                      value={branchDetails.street}
-                      onChange={handleChange}
+                      variant="outlined"
                       required
+                      id="branch_name"
+                      label="Branch Name"
+                      name="branch_name"
+                      type="text"
+                      value={branchDetails.branch_name}
+                      onChange={handleChange}
+                      sx={{ width: "100%" }}
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
+                    {/* Email */}
                     <TextField
-                      sx={{ width: "100%" }}
-                      name="city"
-                      label="city"
-                      type="text"
-                      id="city"
-                      value={branchDetails.city}
-                      onChange={handleChange}
+                      variant="outlined"
                       required
+                      id="IFSC"
+                      label="IFSC Code"
+                      name="IFSC"
+                      type="text"
+                      value={branchDetails.IFSC}
+                      onChange={handleChange}
+                      sx={{ width: "100%" }}
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <TextField
-                      sx={{ width: "100%" }}
-                      name="state"
-                      label="state"
-                      type="text"
-                      id="state"
-                      value={branchDetails.state}
-                      onChange={handleChange}
+                    <MuiTelInput
+                      value={phoneNo}
+                      onChange={(value, info) => {
+                        setPhoneNo(value);
+                        branchDetails.phone_pin = parseInt(info.countryCallingCode);
+                        branchDetails.phone_number = info.nationalNumber;
+                      }}
+                      name="phone_number"
+                      label="Phone Number"
+                      placeholder="+91 1234567890"
                       required
+                      id="phone_number"
+                      sx={{ width: "100%" }}
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
+                    {/* Email */}
                     <TextField
-                      sx={{ width: "100%" }}
-                      name="country"
-                      label="country"
-                      type="text"
-                      id="country"
-                      value={branchDetails.country}
-                      onChange={handleChange}
+                      variant="outlined"
                       required
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <TextField
-                      sx={{ width: "100%" }}
-                      name="pincode"
-                      label="pincode"
-                      type="number"
-                      id="pincode"
-                      value={branchDetails.pincode}
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      type="email"
+                      value={branchDetails.email}
                       onChange={handleChange}
-                      required
+                      sx={{ width: "100%" }}
                     />
                   </Grid>
                 </Grid>
 
-                <Grid container justifyContent="center" alignItems="center" spacing={3}>
-                  <Grid item>
-                    <Button
-                      sx={{ my: 3, width: { xs: "100%", md: "200px" } }}
-                      type="submit"
-                      variant="contained"
-                      color="success"
-                      startIcon={<Done />}
-                    >
-                      Save Changes
-                    </Button>
+                <Divider sx={{ my: 4 }}>Address</Divider>
+
+                <FormControl sx={{ width: "100%" }}>
+                  {/* Address */}
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <TextField
+                        sx={{ width: "100%" }}
+                        name="street"
+                        label="street"
+                        type="text"
+                        id="street"
+                        value={branchDetails.street}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        sx={{ width: "100%" }}
+                        name="city"
+                        label="city"
+                        type="text"
+                        id="city"
+                        value={branchDetails.city}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        sx={{ width: "100%" }}
+                        name="state"
+                        label="state"
+                        type="text"
+                        id="state"
+                        value={branchDetails.state}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        sx={{ width: "100%" }}
+                        name="country"
+                        label="country"
+                        type="text"
+                        id="country"
+                        value={branchDetails.country}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        sx={{ width: "100%" }}
+                        name="pincode"
+                        label="pincode"
+                        type="number"
+                        id="pincode"
+                        value={branchDetails.pincode}
+                        onChange={handleChange}
+                        required
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Button
-                      sx={{ my: 3, width: { xs: "100%", md: "200px" } }}
-                      type="button"
-                      variant="contained"
-                      color="error"
-                      startIcon={<Delete />}
-                      onClick={handleDelete}
-                    >
-                      Delete
-                    </Button>
+
+                  <Grid container justifyContent="center" alignItems="center" spacing={3}>
+                    <Grid item>
+                      <Button
+                        sx={{ my: 3, width: { xs: "100%", md: "200px" } }}
+                        type="submit"
+                        variant="contained"
+                        color="success"
+                        startIcon={<Done />}
+                      >
+                        Save Changes
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        sx={{ my: 3, width: { xs: "100%", md: "200px" } }}
+                        type="button"
+                        variant="contained"
+                        color="error"
+                        startIcon={<Delete />}
+                        onClick={handleDelete}
+                      >
+                        Delete
+                      </Button>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </FormControl>
-            </form>
-          </Box>
+                </FormControl>
+              </form>
+            </Box>
+          </Card>
         </Box>
       )}
     </>

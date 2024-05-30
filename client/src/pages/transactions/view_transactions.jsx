@@ -19,6 +19,7 @@ import {
   Select,
   MenuItem,
   Grid,
+  Stack,
 } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -50,14 +51,15 @@ function Row(props) {
           })}
         </TableCell>
         <TableCell
-          width="400"
           align="center"
           sx={{ textOverflow: "ellipsis", display: { xs: "none", sm: "table-cell" } }}
         >
           {transaction.description}
         </TableCell>
         <TableCell>
-          <CurrencyRupee /> {transaction.amount_transferred}
+          <Stack direction="row" alignItems="center" gap={1}>
+            <CurrencyRupee /> {transaction.amount_transferred}
+          </Stack>
         </TableCell>
         <TableCell sx={{ display: { xs: "none", sm: "table-cell" } }}>
           {`${transaction?.From_account_id?.user?.first_name} 
@@ -178,7 +180,7 @@ function Transactions() {
   };
 
   return (
-    <div>
+    <Box sx={{ width: { xs: "100%", lg: "70%" }, margin: "auto" }}>
       <Typography color="primary" variant="h4">
         Transactions
       </Typography>
@@ -228,11 +230,7 @@ function Transactions() {
                 <TableRow>
                   <TableCell />
                   <TableCell>Date</TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{ display: { xs: "none", sm: "table-cell" } }}
-                    width="400"
-                  >
+                  <TableCell align="center" sx={{ display: { xs: "none", sm: "table-cell" } }}>
                     Description
                   </TableCell>
                   <TableCell>Amount</TableCell>
@@ -278,7 +276,7 @@ function Transactions() {
           )}
         </Card>
       )}
-    </div>
+    </Box>
   );
 }
 

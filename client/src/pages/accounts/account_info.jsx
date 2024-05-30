@@ -37,7 +37,7 @@ function AccountInfo() {
   };
 
   return (
-    <Container component="main" sx={{ maxWidth: { xs: "100%", md: "md" } }}>
+    <Container component="main" sx={{ width: { xs: "100%", lg: "70%" }, margin: "auto" }}>
       <Stack alignItems="center" direction="row" gap={2} sx={{ my: 2 }}>
         <AccountBalance color="primary" />
         <Typography color="primary" variant="h4">
