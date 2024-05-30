@@ -181,7 +181,7 @@ module.exports.getOneTransaction = catchAsyncError(async (req, res, next) => {
 module.exports.getAllTransactions = catchAsyncError(async (req, res, next) => {
   // pagination , sends 10 results each time
   const page = req.query.page || 1; // current page
-  const limit = 3; // limit is set to 10
+  const limit = 10; // limit is set to 10
   const offset = (parseInt(page) - 1) * limit; // calculate how many to skip
   //   sorting , by default descending
   const order = req.query.sort || "DESC";
@@ -203,16 +203,17 @@ module.exports.getAllTransactions = catchAsyncError(async (req, res, next) => {
       if (req.query.transactionType === "debit") {
         whereCondition = {
           from_account_id: account.account_id,
-          user_id: req.user.id,
+
           [Op.not]: { to_account_id: account.account_id },
         };
       } else if (req.query.transactionType === "credit") {
         whereCondition = {
           to_account_id: account.account_id,
-          user_id: req.user.id,
         };
       } else {
-        whereCondition.user_id = req.user.id;
+        whereCondition = {
+          [Op.or]: [{ to_account_id: account.account_id }, { from_account_id: account.account_id }],
+        };
       }
 
       console.log("where", whereCondition);

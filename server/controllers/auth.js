@@ -37,45 +37,49 @@ module.exports.signup = catchAsyncError(async (req, res, next) => {
     let newUser;
 
     if (user_type === "admin") {
-      newUser = await User.create({ ...req.body, isActive: true });
+      newUser = await User.build({ ...req.body, isActive: true });
     } else {
-      newUser = await User.create({ ...req.body, isActive: false });
+      newUser = await User.build({ ...req.body, isActive: false });
     }
 
     //   Hash password and insert into auth table
     const saltRounds = 10;
     await bcrypt.hash(password, saltRounds, async function (err, hash) {
       if (err) {
+        await newUser.destroy();
         return next(new AppError("Something went wrong , please try again later", 500));
       }
 
-      await Auth.create({
+      await newUser.save();
+
+      const auth = await Auth.build({
         user_id: newUser.id,
         email,
         phone_pin: phone_pin,
         phone_number: phone_number,
         password: hash,
       });
+      await auth.save();
+      if (user_type === "customer") {
+        // generate account number
+        const newAccountnumber = `${phone_pin}${phone_number}`;
+
+        await Accounts.create({
+          user_id: newUser.id,
+          account_number: newAccountnumber,
+          balance: 0.0,
+          account_type: req.body.account_type,
+          transaction_PIN: "1234",
+          branch_id: req.body.branch_id,
+        });
+
+        // send mail
+
+        await accountCreated({ to: newUser.email });
+      }
     });
 
     //     // if user type is customer then generate account number and add it to accounts table
-
-    if (user_type === "customer") {
-      // generate account number
-      const newAccountnumber = `${phone_pin}${phone_number}`;
-
-      await Accounts.create({
-        user_id: newUser.id,
-        account_number: newAccountnumber,
-        balance: 0.0,
-        account_type: req.body.account_type,
-        transaction_PIN: "1234",
-        branch_id: req.body.branch_id,
-      });
-
-      // send mail
-      await accountCreated();
-    }
 
     return res.status(200).json({
       status: "success",
@@ -134,6 +138,7 @@ module.exports.sendResetLink = catchAsyncError(async (req, res, next) => {
 
     const mailBody = {
       body: `<h1>Password Reset Instructions</h1> <br/> OTP : ${OTP} <br/>  <a href="http://localhost:3000/reset/${user.id}">Click here <a/>`,
+      to: email,
     };
 
     const MailStatus = sendResetLinkMail(mailBody);
@@ -175,9 +180,9 @@ module.exports.toggleUserStatus = catchAsyncError(async (req, res, next) => {
     await user.update({ isActive: isActive });
 
     if (isActive === "true") {
-      await accountStatus({ message: "Activated" });
+      await accountStatus({ message: "Activated", to: user.email });
     } else {
-      await accountStatus({ message: "Deactivated" });
+      await accountStatus({ message: "Deactivated", to: user.email });
     }
 
     const account = await Accounts.findOne({

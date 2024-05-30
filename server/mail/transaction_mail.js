@@ -3,7 +3,7 @@ const nodemailer = require("../config/nodemailer");
 module.exports.SentMail = async (data) => {
   let mailOptions = {
     from: "vikasvickycoorg@gmail.com",
-    to: "vikasramaiah0@gmail.com",
+    to: data.to,
     subject: "Swiftbank - New Transaction ",
     html: `<h6>tansaction successfull</h6> <br/> Rs.${data.amount} sent to  ${data.user}`,
   };
@@ -21,7 +21,7 @@ module.exports.SentMail = async (data) => {
 module.exports.ReceivedMail = async (data) => {
   let mailOptions = {
     from: "vikasvickycoorg@gmail.com",
-    to: "vikasramaiah0@gmail.com",
+    to: data.to,
     subject: "Swiftbank - New Transaction",
     html: `<h6> Rs.${data.amount}  Money Receieved from  ${data.user}</h6>  `,
   };

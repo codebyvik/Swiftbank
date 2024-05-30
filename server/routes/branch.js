@@ -8,6 +8,6 @@ router.post("/update/:id", passport.checkAuthentication, branch.updateBranchDeta
 router.post("/add", passport.checkAuthentication, branch.addBranch);
 router.post("/delete", passport.checkAuthentication, branch.deleteBranch);
 router.get("/:id", passport.checkAuthentication, branch.getBranchDetails);
-router.get("/", passport.checkAuthentication, branch.getAllBranches);
+router.get("/", branch.getAllBranches);
 
 module.exports = router;

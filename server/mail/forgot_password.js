@@ -4,7 +4,7 @@ const sendResetLinkMail = async (data) => {
   console.log("data", data);
   let mailOptions = {
     from: "vikasvickycoorg@gmail.com",
-    to: "vikasramaiah0@gmail.com",
+    to: data.to,
     subject: "Swiftbank - Reset password",
     html: data.body,
   };
