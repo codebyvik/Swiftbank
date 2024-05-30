@@ -16,6 +16,7 @@ import { fetchAccountStart, toggleAccountStart } from "../../redux/accounts/acco
 import dayjs from "dayjs";
 
 import calendar from "dayjs/plugin/calendar";
+import BackButton from "../../utils/__back_button";
 
 // format date
 dayjs.extend(calendar);
@@ -38,6 +39,11 @@ function AccountInfo() {
 
   return (
     <Container component="main" sx={{ width: { xs: "100%", lg: "70%" }, margin: "auto" }}>
+      {user && user?.user_type === "admin" ? (
+        <BackButton location="/accounts" />
+      ) : (
+        <BackButton location="/" />
+      )}
       <Stack alignItems="center" direction="row" gap={2} sx={{ my: 2 }}>
         <AccountBalance color="primary" />
         <Typography color="primary" variant="h4">

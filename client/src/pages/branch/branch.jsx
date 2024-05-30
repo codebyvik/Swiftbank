@@ -19,6 +19,7 @@ import SimpleBackdrop from "../../utils/backdrop";
 import { fetchbranchStart, updateBranchStart } from "../../redux/branches/branches.slice";
 import { useParams } from "react-router-dom";
 import DeleteModal from "./delete_branch_modal";
+import BackButton from "../../utils/__back_button";
 
 const Branch = () => {
   const { branch } = useSelector((state) => state.branches);
@@ -148,6 +149,7 @@ const Branch = () => {
             padding: 2,
           }}
         >
+          <BackButton location="/branch" />
           <Typography color="primary" mb={4} variant="h4">
             Branch
           </Typography>

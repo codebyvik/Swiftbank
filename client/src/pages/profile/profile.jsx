@@ -12,6 +12,7 @@ import {
   FormControl,
   styled,
   Divider,
+  Card,
 } from "@mui/material";
 import { CloudUpload, Save } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
@@ -27,6 +28,7 @@ import dayjs from "dayjs";
 
 import AlertUser from "../../utils/show_alert";
 import SimpleBackdrop from "../../utils/backdrop";
+import BackButton from "../../utils/__back_button";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -196,13 +198,14 @@ const Profile = () => {
       ) : (
         <Box
           sx={{
-            maxWidth: { sm: "sm", md: "100%" },
+            maxWidth: { xs: "100%", md: "80%" },
             marginX: "auto",
             mt: -3,
             padding: 2,
           }}
         >
-          <Typography mb={4} textAlign="center" variant="h4">
+          <BackButton location="/" />
+          <Typography color="primary" mb={4} variant="h5">
             Profile
           </Typography>
 
@@ -211,21 +214,21 @@ const Profile = () => {
               display: "flex",
               flexDirection: "row-reverse",
               justifyContent: "space-evenly",
-              alignItems: "center",
+              alignItems: "start",
               flexWrap: "wrap",
             }}
           >
             {/* AVATAR AND UPLOAD AVATAR */}
-            <Box
+            <Card
               sx={{
-                boxShadow: 1,
                 flex: 3,
-                margin: { xs: "0 0 10px 0 ", md: "-400px 0 0 30px" },
+                mx: { xs: 0, lg: 4 },
                 padding: 2,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
+                minWidth: { xs: "100%", md: "200px" },
               }}
             >
               <Avatar
@@ -252,10 +255,10 @@ const Profile = () => {
                 Select file
                 <VisuallyHiddenInput type="file" accept="image/png, image/jpeg " />
               </Button>
-            </Box>
+            </Card>
 
             {/* PROFILE DETAILS */}
-            <Box sx={{ boxShadow: 1, flex: 9, padding: 2 }}>
+            <Card sx={{ flex: 9, padding: 2, minWidth: { xs: "100%", md: "600px" } }}>
               <form noValidate onSubmit={handleSubmit}>
                 <Box sx={{ display: { xs: "block", md: "flex" }, justifyContent: "space-between" }}>
                   <Box sx={{ flex: 6 }}>
@@ -544,7 +547,7 @@ const Profile = () => {
                   </Grid>
                 </FormControl>
               </form>
-            </Box>
+            </Card>
           </Box>
         </Box>
       )}

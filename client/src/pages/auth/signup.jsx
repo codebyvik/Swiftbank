@@ -41,6 +41,7 @@ const SignUp = () => {
 
   const { branches } = useSelector((state) => state.branches);
 
+  // eslint-disable-next-line
   const [payload, setPayload] = useState({
     page: 1,
     sort: "DESC",

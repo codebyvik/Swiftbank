@@ -3,6 +3,7 @@ import { Typography, TextField, Button, Grid, Box, Card } from "@mui/material";
 import AlertUser from "../../utils/show_alert";
 import { useDispatch } from "react-redux";
 import { addBeneficiaryStart } from "../../redux/beneficiaries/beneficiaries.slice";
+import BackButton from "../../utils/__back_button";
 
 function AddBeneficiary() {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ function AddBeneficiary() {
 
   return (
     <Box sx={{ width: { xs: "100%", md: "60%" }, margin: "auto" }}>
+      <BackButton location="/beneficiaries" />
       <Typography variant="h4" color="primary" my={3}>
         Add Beneficiary
       </Typography>

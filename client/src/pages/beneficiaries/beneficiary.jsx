@@ -7,6 +7,7 @@ import {
   fetchBeneficiaryStart,
   updateBeneficiaryStart,
 } from "../../redux/beneficiaries/beneficiaries.slice";
+import BackButton from "../../utils/__back_button";
 
 function Beneficiary() {
   const dispatch = useDispatch();
@@ -64,6 +65,7 @@ function Beneficiary() {
 
   return (
     <Box sx={{ width: { xs: "100%", md: "60%" }, margin: "auto" }}>
+      <BackButton location="/beneficiaries" />
       <Typography variant="h4" color="primary" my={3}>
         Beneficiary Details
       </Typography>

@@ -17,14 +17,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDashboardStart } from "../../redux/accounts/account.slice";
-import {
-  Add,
-  ArrowForward,
-  CurrencyRupee,
-  Groups,
-  Payments,
-  SendToMobile,
-} from "@mui/icons-material";
+import { Add, ArrowForward, CurrencyRupee, Groups, SendToMobile } from "@mui/icons-material";
 import Title from "../../utils/Page_title";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";

@@ -6,6 +6,7 @@ import Title from "../../utils/Page_title";
 import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 import AlertUser from "../../utils/show_alert";
 import { addBranchStart } from "../../redux/branches/branches.slice";
+import BackButton from "../../utils/__back_button";
 
 const AddBranch = () => {
   Title(`Add branch`);
@@ -71,6 +72,7 @@ const AddBranch = () => {
         padding: 2,
       }}
     >
+      <BackButton location="/branch" />
       <Typography color="primary" mb={4} variant="h4">
         Add Branch
       </Typography>

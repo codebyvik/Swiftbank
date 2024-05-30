@@ -28,6 +28,7 @@ import {
 } from "../../redux/beneficiaries/beneficiaries.slice";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
+import BackButton from "../../utils/__back_button";
 
 dayjs.extend(calendar);
 
@@ -61,6 +62,7 @@ function ViewBeneficiaries() {
 
   return (
     <Box sx={{ width: { xs: "100%", lg: "70%" }, margin: "auto" }}>
+      <BackButton location="/" />
       <Typography color="primary" variant="h4">
         Beneficiaries
       </Typography>

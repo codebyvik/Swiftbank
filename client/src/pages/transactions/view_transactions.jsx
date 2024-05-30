@@ -29,6 +29,7 @@ import Title from "../../utils/Page_title";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import { fetchTransactionStart } from "../../redux/transactions/transactions.slice";
+import BackButton from "../../utils/__back_button";
 
 function Row(props) {
   const { user, transaction } = props;
@@ -181,6 +182,7 @@ function Transactions() {
 
   return (
     <Box sx={{ width: { xs: "100%", lg: "70%" }, margin: "auto" }}>
+      <BackButton location="/" />
       <Typography color="primary" variant="h4">
         Transactions
       </Typography>

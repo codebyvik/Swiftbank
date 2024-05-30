@@ -25,6 +25,7 @@ import Title from "../../utils/Page_title";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import { Link } from "react-router-dom";
+import BackButton from "../../utils/__back_button";
 
 // format date
 dayjs.extend(calendar);
@@ -55,6 +56,7 @@ const AllAccounts = () => {
 
   return (
     <Box sx={{ width: { xs: "100%", lg: "70%" }, margin: "auto" }}>
+      <BackButton location="/" />
       <Typography color="primary" variant="h5" my={2}>
         All Accounts
       </Typography>

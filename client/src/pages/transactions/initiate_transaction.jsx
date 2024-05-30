@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBeneficiariesStart } from "../../redux/beneficiaries/beneficiaries.slice";
 import { addTransactionStart } from "../../redux/transactions/transactions.slice";
 import { useLocation, useNavigate } from "react-router-dom";
+import BackButton from "../../utils/__back_button";
 
 const steps = ["Select Benficiary", "Enter Amount and description", "Confirm"];
 
@@ -97,6 +98,7 @@ function InitiateTransaction() {
 
   return (
     <Box sx={{ width: { xs: "100%", md: "70%", lg: "50%" }, margin: "auto" }}>
+      <BackButton location="/" />
       <Typography color="primary" variant="h4" my={2}>
         Send Money
       </Typography>
