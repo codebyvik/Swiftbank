@@ -30,12 +30,27 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 
 import AlertUser from "../../utils/show_alert";
+import { fetchAllbranchesStart } from "../../redux/branches/branches.slice";
 
 const SignUp = () => {
   Title("Signup");
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  const { branches } = useSelector((state) => state.branches);
+
+  const [payload, setPayload] = useState({
+    page: 1,
+    sort: "DESC",
+    name: "",
+  });
+
+  useEffect(() => {
+    dispatch(fetchAllbranchesStart(payload));
+  }, [dispatch, payload]);
+
   useEffect(() => {
     if (user) {
       navigate(location.state?.fromLocation || "/");
@@ -63,42 +78,21 @@ const SignUp = () => {
     pincode: "",
     password: "",
     confirmPassword: "",
+    branch_id: "",
   });
 
-  const dispatch = useDispatch();
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setCredentials({ ...credentials, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // dispatch(SigninUserStart(credentials));
+
     const verificationStatus = await verifyCredentials();
     if (verificationStatus) {
       const userCredentials = {
-        account_type: credentials.account_type,
-        user_type: credentials.user_type,
-        first_name: credentials.first_name,
-        last_name: credentials.last_name,
-        email: credentials.email,
-        phone_pin: credentials.phone_pin,
-        phone_number: credentials.phone_number,
-        avatar: "",
-        user_gender: credentials.user_gender,
-        nationality: credentials.nationality,
-        user_dateOfBirth: credentials.user_dateOfBirth,
-        user_profession: credentials.user_profession,
-        user_maritalStatus: credentials.user_maritalStatus,
-        address: {
-          city: credentials.city,
-          street: credentials.street,
-          state: credentials.state,
-          country: credentials.country,
-          pincode: credentials.pincode,
-        },
-        password: credentials.password,
+        credentials,
       };
 
       dispatch(SignUpUserStart(userCredentials));
@@ -106,8 +100,14 @@ const SignUp = () => {
   };
 
   const verifyCredentials = async () => {
+    console.log(credentials);
     for (const value in credentials) {
       if (value === "account_type") {
+        if (credentials.user_type === "admin") {
+          continue;
+        }
+      }
+      if (value === "is") {
         if (credentials.user_type === "admin") {
           continue;
         }
@@ -199,6 +199,34 @@ const SignUp = () => {
                         </MenuItem>
                         <MenuItem value="savings">Savings</MenuItem>
                         <MenuItem value="current">current</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <FormControl fullWidth sx={{ my: 2 }}>
+                      <InputLabel id="branch_name_label">Select Branch</InputLabel>
+                      <Select
+                        labelId="branch_name_label"
+                        id="branch_name"
+                        value={credentials.branch_id}
+                        name="branch_id"
+                        label="Select Branch *"
+                        onChange={handleChange}
+                      >
+                        <MenuItem disabled value="">
+                          <em>Select Branch </em>
+                        </MenuItem>
+                        {branches?.length > 0 ? (
+                          branches.map((branch) => {
+                            return (
+                              <MenuItem key={branch.branchId} value={branch.branchId}>
+                                {branch.branch_name}
+                              </MenuItem>
+                            );
+                          })
+                        ) : (
+                          <MenuItem disabled value="">
+                            <em>No branches available </em>
+                          </MenuItem>
+                        )}
                       </Select>
                     </FormControl>
                   </>

@@ -34,6 +34,8 @@ import AllBranches from "./pages/branch/view_branches";
 import Branch from "./pages/branch/branch";
 import AddBranch from "./pages/branch/add_branch";
 import Success from "./pages/transactions/__success";
+import ResetPassword from "./pages/auth/reset_password";
+import ForgotPassword from "./pages/auth/forgot_password";
 
 function App() {
   const mode = useSelector((state) => state.config.mode);
@@ -102,6 +104,8 @@ function App() {
               {/* common  routes */}
               <Route path="/signin" element={<SignIn />}></Route>
               <Route path="/signup" element={<SignUp />}></Route>
+              <Route path="/reset/:id" element={<ResetPassword />}></Route>
+              <Route path="/forgot-password" element={<ForgotPassword />}></Route>
 
               <Route element={<ProtectedRoute />}>
                 <Route path="/profile" element={<Profile />}></Route>

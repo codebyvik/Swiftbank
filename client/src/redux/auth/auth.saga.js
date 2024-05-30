@@ -13,6 +13,7 @@ function* fetchCurrentUserData() {
     yield put(fetchUserSuccess(data));
   } catch (error) {
     yield localStorage.removeItem("loggedIn");
+    yield localStorage.removeItem("user_type");
     yield put(fetchUserError(error.response.data));
   }
 }
@@ -29,6 +30,8 @@ function* signinUserStart({ payload }) {
     yield localStorage.setItem("user_type", data.user.user_type);
     yield put(fetchUserSuccess(data));
   } catch (error) {
+    yield localStorage.removeItem("loggedIn");
+    yield localStorage.removeItem("user_type");
     if (error.response.data === "Unauthorized") {
       AlertUser("Incorrect user name/password", "error");
       yield put(fetchUserError({ status: "fail", message: "Incorrect user name/password" }));
@@ -45,9 +48,12 @@ export function* signinUser() {
 
 function* SignUpUser({ payload }) {
   try {
-    yield axios.post("http://localhost:8000/api/v1/auth/signup", payload);
+    const { data } = yield axios.post(
+      "http://localhost:8000/api/v1/auth/signup",
+      payload.credentials
+    );
     yield AlertUser("Registered successfully", "success");
-    yield put(fetchUserSuccess());
+    yield put(fetchUserSuccess(data));
     yield window.location.replace("http://localhost:3000/signin");
   } catch (error) {
     yield localStorage.removeItem("loggedIn");
@@ -77,4 +83,40 @@ function* SignoutUser() {
 
 export function* watchSignoutUserStart() {
   yield takeLatest("user/SignoutUserStart", SignoutUser);
+}
+
+function* sendresetLink({ payload }) {
+  try {
+    yield axios.post("http://localhost:8000/api/v1/auth/reset-link", payload);
+    AlertUser("OTP sent to your mail", "success");
+    setTimeout(() => {
+      window.location.replace("http://localhost:3000/signin");
+    }, 3000);
+  } catch (error) {
+    AlertUser(error.response.data.message, "error");
+
+    yield put(fetchUserError(error.response.data));
+  }
+}
+
+export function* watchSendresetLink() {
+  yield takeLatest("user/sendresetLink", sendresetLink);
+}
+
+function* resetPassword({ payload }) {
+  const { id, credentials } = payload;
+  try {
+    yield axios.post(`http://localhost:8000/api/v1/user/forgot-password/${id}`, credentials);
+    AlertUser("Password has been reset", "success");
+    setTimeout(() => {
+      window.location.replace("http://localhost:3000/signin");
+    }, 3000);
+  } catch (error) {
+    AlertUser(error.response.data.message, "error");
+    yield put(fetchUserError(error.response.data));
+  }
+}
+
+export function* watchResetpassword() {
+  yield takeLatest("user/resetpassword", resetPassword);
 }

@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from "react";
-import {
-  Avatar,
-  Button,
-  TextField,
-  Link,
-  Grid,
-  Typography,
-  Card,
-  CardContent,
-  Box,
-} from "@mui/material";
+import { Avatar, Button, TextField, Typography, Card, CardContent, Box } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import logo from "../../assets/logo-transparent.png";
 import { useDispatch, useSelector } from "react-redux";
-import { SigninUserStart } from "../../redux/auth/auth.slice";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import Title from "../../utils/Page_title";
+import AlertUser from "../../utils/show_alert";
+import { sendresetLink } from "../../redux/auth/auth.slice";
 
-const SignIn = () => {
-  Title("SignIn");
+const ForgotPassword = () => {
+  Title("Frogot password");
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,7 +21,7 @@ const SignIn = () => {
     }
   }, [user, navigate, location]);
 
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [credentials, setCredentials] = useState({ email: "" });
 
   const dispatch = useDispatch();
   const handleChange = (e) => {
@@ -39,7 +31,10 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(SigninUserStart(credentials));
+    if (!credentials.email) {
+      return AlertUser("Enter email", "error");
+    }
+    dispatch(sendresetLink(credentials));
   };
 
   return (
@@ -58,7 +53,7 @@ const SignIn = () => {
                 <Avatar sx={{ mr: 2 }}>
                   <LockOutlinedIcon />
                 </Avatar>
-                Sign In
+                Forgot password
               </Typography>
             </Box>
 
@@ -76,34 +71,10 @@ const SignIn = () => {
                 value={credentials.email}
                 onChange={handleChange}
               />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={credentials.password}
-                onChange={handleChange}
-              />
+
               <Button sx={{ my: 3 }} type="submit" fullWidth variant="contained" color="primary">
-                Sign In
+                Send Reset Link
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="/forgot-password" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/signup" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
             </form>
           </Box>
         </CardContent>
@@ -112,4 +83,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgotPassword;

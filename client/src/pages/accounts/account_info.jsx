@@ -15,6 +15,11 @@ import { useParams } from "react-router-dom";
 import { fetchAccountStart, toggleAccountStart } from "../../redux/accounts/account.slice";
 import dayjs from "dayjs";
 
+import calendar from "dayjs/plugin/calendar";
+
+// format date
+dayjs.extend(calendar);
+
 function AccountInfo() {
   const { user } = useSelector((state) => state.user);
   const { account } = useSelector((state) => state.accounts);
@@ -71,7 +76,7 @@ function AccountInfo() {
                 <Stack direction="row" alignItems="center" gap={2} sx={{ my: 2 }}>
                   <Typography variant="h6"> DOB : </Typography>
                   <Typography variant="subtitle" component="p" fontSize={18}>
-                    {account.user.user_dateOfBirth} (DD/MM/YYYY)
+                    {dayjs(account.user.user_dateOfBirth).format("MM/DD/YYYY")} (DD/MM/YYYY)
                   </Typography>
                 </Stack>
                 <Stack direction="row" alignItems="center" gap={2} sx={{ my: 2 }}>

@@ -124,10 +124,10 @@ const CustomerDashboard = () => {
                         <TableCell>
                           {transaction.from_account_id === transaction.to_account_id
                             ? "Deposit"
-                            : user.id === transaction.from_account_id &&
-                              user.id !== transaction.to_account_id
-                            ? "Credit"
-                            : "Debit"}
+                            : user.id === transaction?.From_account_id?.user_id &&
+                              user.id !== transaction?.To_account_id?.user_id
+                            ? "Debit"
+                            : "Credit"}
                         </TableCell>
                       </TableRow>
                     );

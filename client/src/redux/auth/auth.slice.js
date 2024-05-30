@@ -41,6 +41,12 @@ export const userSlice = createSlice({
     UpdateUserStart: (state) => {
       state.loading = true;
     },
+    sendresetLink: (state) => {
+      return (state = initialUserState);
+    },
+    resetpassword: (state) => {
+      return (state = initialUserState);
+    },
   },
 });
 
@@ -53,6 +59,8 @@ export const {
   SignoutUserStart,
   SignoutUserSuccess,
   UpdateUserStart,
+  sendresetLink,
+  resetpassword,
 } = userSlice.actions;
 
 export default userSlice.reducer;
