@@ -54,7 +54,9 @@ function* SignUpUser({ payload }) {
     );
     yield AlertUser("Registered successfully", "success");
     yield put(fetchUserSuccess(data));
-    yield window.location.replace("http://localhost:3000/signin");
+    setTimeout(() => {
+      window.location.replace("http://localhost:3000/signin");
+    }, 3000);
   } catch (error) {
     yield localStorage.removeItem("loggedIn");
     AlertUser(error.response.data.message, "error");

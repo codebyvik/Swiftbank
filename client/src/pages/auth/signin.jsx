@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SigninUserStart } from "../../redux/auth/auth.slice";
 import { useLocation, useNavigate } from "react-router-dom";
 import Title from "../../utils/Page_title";
+import AlertUser from "../../utils/show_alert";
 
 const SignIn = () => {
   Title("SignIn");
@@ -39,6 +40,11 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    for (const item in credentials) {
+      if (!credentials[item]) {
+        return AlertUser("Both the fields are required", "error");
+      }
+    }
     dispatch(SigninUserStart(credentials));
   };
 

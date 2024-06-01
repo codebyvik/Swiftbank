@@ -110,7 +110,7 @@ const Navbar = ({ openSidebar, setOpenSidebar }) => {
                 sx={{ width: 40, height: 40 }}
                 alt="profile image"
               >
-                V
+                {user?.first_name.charAt(0)}
               </Avatar>
             </IconButton>
           </Tooltip>

@@ -27,7 +27,7 @@ import {
   ProtectedCustomerRoute,
   ProtectedRoute,
 } from "./utils/protectedRoute";
-import SimpleBackdrop from "./utils/backdrop";
+
 import InitiateTransaction from "./pages/transactions/initiate_transaction";
 import { toggleDarkMode } from "./redux/config.slice";
 import AllBranches from "./pages/branch/view_branches";
@@ -41,7 +41,7 @@ import ResetPin from "./pages/auth/reset_PIN";
 function App() {
   const mode = useSelector((state) => state.config.mode);
   const userMode = localStorage.getItem("mode");
-  const { isAuthenticated, loading, user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -100,7 +100,6 @@ function App() {
             sx={{ flexGrow: 1, maxWidth: { xs: "80%", md: "100%" }, p: 3, margin: "auto" }}
           >
             {user ? <DrawerHeader /> : <></>}
-            {loading && !isAuthenticated ? <SimpleBackdrop open /> : <></>}
             <Routes>
               {/* common  routes */}
               <Route path="/signin" element={<SignIn />}></Route>

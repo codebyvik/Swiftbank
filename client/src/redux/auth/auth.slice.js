@@ -6,6 +6,7 @@ const initialUserState = {
   error: false,
   errorMsg: null,
   isAuthenticated: false,
+  status: "idle",
 };
 
 export const userSlice = createSlice({
@@ -14,20 +15,24 @@ export const userSlice = createSlice({
   reducers: {
     fetchUserStart: (state) => {
       state.loading = true;
+      state.status = "fetching";
     },
     fetchUserSuccess: (state, action) => {
       state.user = action.payload.user;
       state.loading = false;
       state.isAuthenticated = true;
       state.errorMsg = null;
+      state.status = "processed";
     },
     fetchUserError: (state, action) => {
       state.errorMsg = action?.payload?.message;
       state.loading = false;
       state.error = true;
+      state.status = "processed";
     },
     SigninUserStart: (state) => {
       state.loading = true;
+      state.status = "fetching";
     },
     SignUpUserStart: (state) => {
       state.loading = true;

@@ -101,14 +101,13 @@ const SignUp = () => {
   };
 
   const verifyCredentials = async () => {
-    console.log(credentials);
     for (const value in credentials) {
       if (value === "account_type") {
         if (credentials.user_type === "admin") {
           continue;
         }
       }
-      if (value === "is") {
+      if (value === "branch_id") {
         if (credentials.user_type === "admin") {
           continue;
         }
