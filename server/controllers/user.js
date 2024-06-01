@@ -75,8 +75,6 @@ module.exports.getAllUsers = catchAsyncError(async (req, res, next) => {
 // UPDATE PROFILE
 
 module.exports.updateProfile = catchAsyncError(async (req, res, next) => {
-  console.log("body", req.body);
-  console.log("file", req.file);
   const AVATAR_PATH = path.join("/uploads/users/avatars");
 
   try {
@@ -110,7 +108,7 @@ module.exports.updateProfile = catchAsyncError(async (req, res, next) => {
       );
 
       if (!PasswordMatches) {
-        return new AppError("Current Password is incorrect", 401);
+        return next(new AppError("Current Password is incorrect", 401));
       }
 
       const hash = await bcrypt.hash(req.body.new_password, 10);

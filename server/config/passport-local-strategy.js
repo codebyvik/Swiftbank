@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 
 const User = require("../db/models/user"); // USER MODEL
 const Auth = require("../db/models/auth");
+const { Op } = require("sequelize");
 
 // Local authentication using email and password using passport.js
 
@@ -17,13 +18,13 @@ passport.use(
     // funtion to authenticate user
     async function (req, email, password, done) {
       try {
-        const userAuth = await Auth.findOne({ where: { email: email } });
+        const userAuth = await Auth.findOne({ where: { email: { [Op.iLike]: email } } });
 
         if (userAuth) {
           // if user exists check password
           const isPasswordMatched = await bcrypt.compare(password, userAuth.password);
           if (isPasswordMatched) {
-            const user = await User.findOne({ where: { email: email } });
+            const user = await User.findOne({ where: { email: { [Op.iLike]: email } } });
 
             if (user.user_type === "admin") {
               return done(null, user);
@@ -33,12 +34,12 @@ passport.use(
               return done(null, user);
             }
 
-            return done(null, false, { status: "error", message: "Account is suspended" });
+            return done({ status: "error", message: "Account is suspended" }, false);
           }
-          return done(null, false, { status: "error", message: "Email or password don't match" });
+          return done({ status: "error", message: "Incorrect Email/Password" }, false);
         }
 
-        return done(null, false, { status: "error", message: "user not found" });
+        return done({ status: "error", message: "user not found" }, false);
       } catch (error) {
         console.log("error in passport local", error);
         return done(error);

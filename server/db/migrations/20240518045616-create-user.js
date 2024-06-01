@@ -108,13 +108,14 @@ module.exports = {
           type: Sequelize.ENUM("salaried", "student", "unemployed", "others", "self employed"),
           validate: {
             notNull: {
-              msg: "Profession  cannot be null",
+              msg: "Occupation  cannot be null",
             },
             notEmpty: {
-              msg: "Profession cannot be empty",
+              msg: "Occupation cannot be empty",
             },
           },
         },
+
         user_maritalStatus: {
           allowNull: false,
           type: Sequelize.ENUM("married", "unmarried", "others"),
@@ -127,6 +128,7 @@ module.exports = {
             },
           },
         },
+
         street: {
           allowNull: false,
           type: Sequelize.STRING,
