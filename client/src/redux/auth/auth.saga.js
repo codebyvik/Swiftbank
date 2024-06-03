@@ -48,12 +48,12 @@ export function* signinUser() {
 
 function* SignUpUser({ payload }) {
   try {
-    const { data } = yield axios.post(
-      "http://localhost:8000/api/v1/auth/signup",
-      payload.credentials
-    );
+    yield axios.post("http://localhost:8000/api/v1/auth/signup", payload.credentials);
     yield AlertUser("Registered successfully", "success");
-    yield put(fetchUserSuccess(data));
+    // yield put(fetchUserSuccess());
+    setTimeout(() => {
+      window.location.replace("http://localhost:3000/branch");
+    }, 2000);
     setTimeout(() => {
       window.location.replace("http://localhost:3000/signin");
     }, 3000);

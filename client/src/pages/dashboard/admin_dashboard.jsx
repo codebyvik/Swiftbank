@@ -167,7 +167,7 @@ const AdminDashboard = () => {
           </Card>
         </Grid>
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Link to="/branches">
+          <Link to="/branch">
             <Button startIcon={<AccountTree />} variant="contained" color="primary" sx={{ mr: 2 }}>
               view branches
             </Button>

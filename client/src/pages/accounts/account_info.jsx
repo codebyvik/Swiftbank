@@ -195,14 +195,23 @@ function AccountInfo() {
               </Stack>
             </Box>
 
-            <Link
-              to="/reset-pin"
-              style={{ display: "flex", justifyContent: "flex-end", textDecoration: "none" }}
-            >
-              <Button startIcon={<LockReset />} variant="contained" color="primary" sx={{ mr: 2 }}>
-                Reset PIN
-              </Button>
-            </Link>
+            {user && user?.user_type === "customer" ? (
+              <Link
+                to="/reset-pin"
+                style={{ display: "flex", justifyContent: "flex-end", textDecoration: "none" }}
+              >
+                <Button
+                  startIcon={<LockReset />}
+                  variant="contained"
+                  color="primary"
+                  sx={{ mr: 2 }}
+                >
+                  Reset PIN
+                </Button>
+              </Link>
+            ) : (
+              <></>
+            )}
           </CardContent>
         ) : (
           <>

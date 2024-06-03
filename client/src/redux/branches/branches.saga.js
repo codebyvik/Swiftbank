@@ -40,7 +40,10 @@ function* deleteBranch({ payload }) {
     const { data } = yield axios.post(`http://localhost:8000/api/v1/branch/delete/`, payload);
     yield;
     yield put(fetchAllBranchesSuccess(data));
-    yield window.location.replace("http://localhost:3000/branch");
+    yield AlertUser("branch deleted", "error");
+    setTimeout(() => {
+      window.location.replace("http://localhost:3000/branch");
+    }, 3000);
   } catch (error) {
     yield put(branchOperationError(error.response.data));
   }
@@ -56,7 +59,10 @@ function* addBranch({ payload }) {
     yield;
     yield AlertUser("Branch added", "success");
     yield put(fetchAllBranchesSuccess(data));
-    yield window.location.replace("http://localhost:3000/branch");
+
+    setTimeout(() => {
+      window.location.replace("http://localhost:3000/branch");
+    }, 3000);
   } catch (error) {
     yield AlertUser(error.response.data.message, "error");
     yield put(branchOperationError(error.response.data));

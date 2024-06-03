@@ -204,24 +204,28 @@ function Transactions() {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item>
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">Filter By</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={payload.transactionType}
-              label="Age"
-              onChange={handleChange}
-              name="transactionType"
-              sx={{ width: "200px" }}
-            >
-              <MenuItem value="">All transaction</MenuItem>
-              <MenuItem value="debit">Debit</MenuItem>
-              <MenuItem value="credit">Credit</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
+        {user && user?.user_type === "customer" ? (
+          <Grid item>
+            <FormControl>
+              <InputLabel id="demo-simple-select-label">Filter By</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={payload.transactionType}
+                label="Age"
+                onChange={handleChange}
+                name="transactionType"
+                sx={{ width: "200px" }}
+              >
+                <MenuItem value="">All transaction</MenuItem>
+                <MenuItem value="debit">Debit</MenuItem>
+                <MenuItem value="credit">Credit</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        ) : (
+          <></>
+        )}
       </Grid>
 
       {transactions?.length > 0 ? (
