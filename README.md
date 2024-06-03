@@ -74,6 +74,12 @@ Create Tables
   npx sequelize-cli db:migrate
 ```
 
+Add dummy data to table (Optional)
+
+```bash
+  npx npx sequelize-cli db:seed:all
+```
+
 Start the server
 
 ```bash
