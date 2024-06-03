@@ -12,6 +12,8 @@ const session = require("express-session");
 const passport = require("passport");
 const passportLocalStrategy = require("./config/passport-local-strategy");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+// this function will get all dummydata to prepare seeders
+const { getAllUsersData } = require("./utils/__seed_helper");
 
 const app = express();
 

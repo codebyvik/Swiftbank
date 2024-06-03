@@ -7,9 +7,11 @@ const { Op } = require("sequelize");
 // add branch
 module.exports.addBranch = catchAsyncError(async (req, res, next) => {
   try {
+    // if user is not admin , throw error
     if (req.user.user_type !== "admin") {
-      return next(new AppError("Not authorised ", 401));
+      return next(new AppError("Admin account is required to add branches", 403));
     }
+    // find the branch through IFSC code and throw error if branch exists/IFSC code exists
     const branch = await Branch.findOne({
       where: { IFSC: { [Op.iLike]: `%${req.body.IFSC}%` } },
     });

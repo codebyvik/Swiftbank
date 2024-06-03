@@ -39,6 +39,11 @@ module.exports.sendMoney = catchAsyncError(async (req, res, next) => {
       return next(new AppError("you don't have sufficient balance", 401));
     }
 
+    // check if the amount is less than or equal to beneficiary limit
+    if (amount > beneficiary.transfer_limit) {
+      return next(new AppError("Amount cannot be greater than beneficiary limit", 401));
+    }
+
     // check for transaction pin
     if (transaction_PIN != senderAccount.transaction_PIN) {
       return next(new AppError("wrong transaction pin", 401));
