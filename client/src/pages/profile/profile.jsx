@@ -47,7 +47,7 @@ const Profile = () => {
 
   const dispatch = useDispatch();
 
-  Title(`${user?.first_name} ${user?.last_name}`);
+  Title(`Profile | ${user?.first_name} ${user?.last_name}`);
 
   const [phoneNo, setPhoneNo] = useState("");
   const [newAvatar, setNewAvatar] = useState(null);
@@ -120,8 +120,10 @@ const Profile = () => {
     const updatedFields = await verifyNewData();
 
     if (!!updatedFields.entries().next().value) {
-      dispatch(UpdateUserStart({ id: user.id, updatedFields }));
+      return dispatch(UpdateUserStart({ id: user.id, updatedFields }));
     }
+
+    AlertUser("Nothing to update", "warning");
   };
 
   const verifyNewData = async () => {
@@ -135,7 +137,9 @@ const Profile = () => {
       }
 
       if (value === "avatar") {
-        newData.append(value, newAvatar);
+        if (profile.avatar !== `http://localhost:8000/users/avatars/${user.avatar}`) {
+          newData.append(value, newAvatar);
+        }
         continue;
       }
 

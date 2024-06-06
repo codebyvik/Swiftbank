@@ -20,7 +20,7 @@ import Title from "../../utils/Page_title";
 import AlertUser from "../../utils/show_alert";
 
 const SignIn = () => {
-  Title("SignIn");
+  Title("Swiftbank |SignIn");
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const location = useLocation();

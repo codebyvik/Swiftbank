@@ -11,7 +11,7 @@ import AlertUser from "../../utils/show_alert";
 import { sendresetLink } from "../../redux/auth/auth.slice";
 
 const ForgotPassword = () => {
-  Title("Frogot password");
+  Title("Swiftbank | Frogot password");
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const location = useLocation();

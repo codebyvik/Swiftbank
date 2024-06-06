@@ -32,7 +32,7 @@ const Branch = () => {
     dispatch(fetchbranchStart({ id: params.id }));
   }, [dispatch, params.id]);
 
-  Title(`${branch?.branch_name}`);
+  Title(`Swiftbank | ${branch?.branch_name}`);
 
   const [openModal, setopenModel] = useState(false);
   const [phoneNo, setPhoneNo] = useState("");

@@ -33,7 +33,7 @@ import AlertUser from "../../utils/show_alert";
 import { fetchAllbranchesStart } from "../../redux/branches/branches.slice";
 
 const SignUp = () => {
-  Title("Signup");
+  Title("Swiftbank | Signup");
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const location = useLocation();

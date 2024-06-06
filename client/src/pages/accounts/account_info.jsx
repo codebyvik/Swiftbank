@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 
 import calendar from "dayjs/plugin/calendar";
 import BackButton from "../../utils/__back_button";
+import Title from "../../utils/Page_title";
 
 // format date
 dayjs.extend(calendar);
@@ -25,6 +26,8 @@ function AccountInfo() {
   const { user } = useSelector((state) => state.user);
   const { account } = useSelector((state) => state.accounts);
   const params = useParams();
+
+  Title(`Account Info | ${account?.account_number}`);
 
   const dispatch = useDispatch();
   useEffect(() => {

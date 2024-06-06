@@ -9,7 +9,7 @@ import { addBranchStart } from "../../redux/branches/branches.slice";
 import BackButton from "../../utils/__back_button";
 
 const AddBranch = () => {
-  Title(`Add branch`);
+  Title(`Swiftbank | Add branch`);
 
   const dispatch = useDispatch();
 

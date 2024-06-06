@@ -156,7 +156,7 @@ function Row(props) {
 }
 
 function Transactions() {
-  Title("transactions");
+  Title("Swiftbank | transactions");
   const dispatch = useDispatch();
   const [payload, setPayload] = useState({
     page: 1,

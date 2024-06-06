@@ -19,6 +19,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { SignoutUserStart } from "../redux/auth/auth.slice";
 
+// For close and open animation
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {

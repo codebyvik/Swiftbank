@@ -29,10 +29,12 @@ import {
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import BackButton from "../../utils/__back_button";
+import Title from "../../utils/Page_title";
 
 dayjs.extend(calendar);
 
 function ViewBeneficiaries() {
+  Title(`Swiftbank | View beneficiaries`);
   const dispatch = useDispatch();
 
   const { beneficiaries, totalPages } = useSelector((state) => state.beneficiaries);

@@ -63,7 +63,7 @@ function* updateBeneficiary({ payload }) {
       updatedField
     );
     yield;
-    yield AlertUser("Branch Updated", "success");
+    yield AlertUser("Beneficiary Updated", "success");
     yield put(fetchAllBeneficiariesSuccess(data));
   } catch (error) {
     yield AlertUser(error.response.data.message, "error");

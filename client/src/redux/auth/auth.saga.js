@@ -70,7 +70,7 @@ export function* watchSignUpUserStart() {
 
 function* SignoutUser() {
   try {
-    yield axios.get("http://localhost:8000/api/v1/auth/signout");
+    yield axios.delete("http://localhost:8000/api/v1/auth/signout");
     AlertUser("Logged out successfully", "success");
     document.cookie = `Swiftbank=; expires= ${new Date(0).toUTCString()}; path=/;`;
     yield localStorage.removeItem("loggedIn");

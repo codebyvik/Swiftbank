@@ -24,7 +24,7 @@ import calendar from "dayjs/plugin/calendar";
 import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
-  Title("Admin Dashboard");
+  Title("Swiftbank | Dashboard");
   const { user } = useSelector((state) => state.user);
   const { accounts } = useSelector((state) => state.accounts);
   const { transactions } = useSelector((state) => state.transactions);

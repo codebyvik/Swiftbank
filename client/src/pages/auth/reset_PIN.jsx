@@ -4,8 +4,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import AlertUser from "../../utils/show_alert";
 import { resetPIN } from "../../redux/auth/auth.slice";
+import Title from "../../utils/Page_title";
 
 const ResetPin = () => {
+  Title("Swiftbank | Reset PIN");
   const [credentials, setCredentials] = useState({
     current_PIN: "",
     new_PIN: "",

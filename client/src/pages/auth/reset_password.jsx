@@ -11,7 +11,7 @@ import AlertUser from "../../utils/show_alert";
 import { resetpassword } from "../../redux/auth/auth.slice";
 
 const ResetPassword = () => {
-  Title("Frogot password");
+  Title("Swiftbank | Reset password");
   const user = useSelector((state) => state.user.user);
   const navigate = useNavigate();
   const location = useLocation();

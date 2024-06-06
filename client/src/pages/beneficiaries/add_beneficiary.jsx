@@ -4,8 +4,10 @@ import AlertUser from "../../utils/show_alert";
 import { useDispatch } from "react-redux";
 import { addBeneficiaryStart } from "../../redux/beneficiaries/beneficiaries.slice";
 import BackButton from "../../utils/__back_button";
+import Title from "../../utils/Page_title";
 
 function AddBeneficiary() {
+  Title("Swiftbank | Add Beneficiary");
   const dispatch = useDispatch();
   const [beneficiary, setBeneficiary] = useState({
     name: "",

@@ -8,6 +8,7 @@ import {
   updateBeneficiaryStart,
 } from "../../redux/beneficiaries/beneficiaries.slice";
 import BackButton from "../../utils/__back_button";
+import Title from "../../utils/Page_title";
 
 function Beneficiary() {
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ function Beneficiary() {
       });
     }
   }, [beneficiary]);
+
+  Title(`Swiftbank | ${beneficiary?.name}`);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

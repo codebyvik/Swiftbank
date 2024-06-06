@@ -31,7 +31,7 @@ import BackButton from "../../utils/__back_button";
 dayjs.extend(calendar);
 
 const AllAccounts = () => {
-  Title("All accounts");
+  Title("Swiftbank | All accounts");
   const { accounts, totalPages } = useSelector((state) => state.accounts);
   const dispatch = useDispatch();
 

@@ -13,10 +13,12 @@ import { fetchAllBeneficiariesStart } from "../../redux/beneficiaries/beneficiar
 import { addTransactionStart } from "../../redux/transactions/transactions.slice";
 import { useLocation, useNavigate } from "react-router-dom";
 import BackButton from "../../utils/__back_button";
+import Title from "../../utils/Page_title";
 
 const steps = ["Select Benficiary", "Enter Amount and description", "Confirm"];
 
 function InitiateTransaction() {
+  Title("Swiftbank | Send Money");
   const [activeStep, setActiveStep] = useState(0);
 
   const dispatch = useDispatch();

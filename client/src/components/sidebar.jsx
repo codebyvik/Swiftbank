@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 // material ui components
 import MuiDrawer from "@mui/material/Drawer";
 import {
@@ -13,8 +12,7 @@ import {
   IconButton,
 } from "@mui/material";
 // material ui Icons
-// import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import {
   AccountBalance,
   Groups,
@@ -30,6 +28,9 @@ import {
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode } from "../redux/config.slice";
+import ListItemHelper from "./__list_item";
+
+// MUI Defaults
 
 const drawerWidth = 240;
 
@@ -80,12 +81,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" 
   })
 );
 
+// side bar component
+
 const Sidebar = ({ openSidebar, setOpenSidebar }) => {
   const { user } = useSelector((state) => state.user);
   const mode = useSelector((state) => state.config.mode);
   const dispatch = useDispatch();
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const handleDrawerClose = () => {
     setOpenSidebar(false);
@@ -94,8 +96,23 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
     dispatch(toggleDarkMode());
   };
 
+  const CustomerDashboardItems = [
+    { name: "Dashboard", icon: SpaceDashboard, link: "/" },
+    { name: "My Account", icon: AccountBalance, link: `/account-info/${user?.id}` },
+    { name: "Transactions", icon: ReceiptLong, link: "/transactions" },
+    { name: "Beneficiaries", icon: Groups, link: "/beneficiaries" },
+  ];
+
+  const AdminDashboardItems = [
+    { name: "Dashboard", icon: AdminPanelSettings, link: "/" },
+    { name: "All Accounts", icon: PeopleAlt, link: "/accounts" },
+    { name: "All branches", icon: AccountTree, link: "/branch" },
+    { name: "Transactions", icon: ReceiptLong, link: "/transactions" },
+  ];
+
   return (
     <Drawer variant="permanent" open={openSidebar}>
+      {/* OPEN and CLOSE ICON */}
       <DrawerHeader>
         <IconButton onClick={handleDrawerClose}>
           {theme.direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
@@ -103,156 +120,16 @@ const Sidebar = ({ openSidebar, setOpenSidebar }) => {
       </DrawerHeader>
       <Divider />
       <List>
-        <ListItem onClick={() => navigate("/")} disablePadding sx={{ display: "block" }}>
-          <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: openSidebar ? "initial" : "center",
-              px: 2.5,
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                minWidth: 0,
-                mr: openSidebar ? 3 : "auto",
-                justifyContent: "center",
-              }}
-            >
-              {user && user.user_type === "admin" ? <AdminPanelSettings /> : <SpaceDashboard />}
-            </ListItemIcon>
-            <ListItemText primary={"Dashboard"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-          </ListItemButton>
-        </ListItem>
-
-        {user && user.user_type === "admin" ? (
-          <>
-            <ListItem
-              onClick={() => navigate("/accounts")}
-              disablePadding
-              sx={{ display: "block" }}
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: openSidebar ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: openSidebar ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <PeopleAlt />
-                </ListItemIcon>
-                <ListItemText primary={"All Accounts"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem onClick={() => navigate("/branch")} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: openSidebar ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: openSidebar ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <AccountTree />
-                </ListItemIcon>
-                <ListItemText primary={"All branches"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          </>
-        ) : (
-          <ListItem
-            onClick={() => navigate(`/account-info/${user?.id}`)}
-            disablePadding
-            sx={{ display: "block" }}
-          >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: openSidebar ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: openSidebar ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <AccountBalance />
-              </ListItemIcon>
-              <ListItemText primary={"My Account"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        )}
-
-        <ListItem
-          onClick={() => navigate("/transactions")}
-          disablePadding
-          sx={{ display: "block" }}
-        >
-          <ListItemButton
-            sx={{
-              minHeight: 48,
-              justifyContent: openSidebar ? "initial" : "center",
-              px: 2.5,
-            }}
-          >
-            <ListItemIcon
-              sx={{
-                minWidth: 0,
-                mr: openSidebar ? 3 : "auto",
-                justifyContent: "center",
-              }}
-            >
-              <ReceiptLong />
-            </ListItemIcon>
-            <ListItemText primary={"Transactions"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-          </ListItemButton>
-        </ListItem>
-
-        {user && user.user_type === "admin" ? (
-          <></>
-        ) : (
-          <ListItem
-            onClick={() => navigate("/beneficiaries")}
-            disablePadding
-            sx={{ display: "block" }}
-          >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: openSidebar ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: openSidebar ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <Groups />
-              </ListItemIcon>
-              <ListItemText primary={"Beneficiaries"} sx={{ opacity: openSidebar ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        )}
+        {user && user.user_type === "admin"
+          ? AdminDashboardItems.map((item) => {
+              return <ListItemHelper key={item.name} item={item} openSidebar={openSidebar} />;
+            })
+          : CustomerDashboardItems.map((item) => {
+              return <ListItemHelper key={item.name} item={item} openSidebar={openSidebar} />;
+            })}
       </List>
       <Divider />
+      {/* dark mode toggle */}
       <List>
         <ListItem onClick={toggle} disablePadding sx={{ display: "block" }}>
           <ListItemButton

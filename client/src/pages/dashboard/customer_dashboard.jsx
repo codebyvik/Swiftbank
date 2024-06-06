@@ -25,7 +25,7 @@ import { Link } from "react-router-dom";
 import AddMoney from "../transactions/__add_money";
 
 const CustomerDashboard = () => {
-  Title("Dashboard");
+  Title("Swiftbank | Dashboard");
   const { user } = useSelector((state) => state.user);
   const { account } = useSelector((state) => state.accounts);
   const { transactions } = useSelector((state) => state.transactions);
