@@ -21,9 +21,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// return current user
-router.get("/", passport.checkAuthentication, user.sendCurrentUser);
-
 // admin
 router.get("/all", passport.checkAuthentication, user.getAllUsers);
 
@@ -39,5 +36,8 @@ router.post(
 );
 
 router.post("/forgot-password/:id", user.forgotPassword);
+
+// return current user
+router.get("/", passport.checkAuthentication, user.sendCurrentUser);
 
 module.exports = router;

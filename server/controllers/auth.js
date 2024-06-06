@@ -102,12 +102,15 @@ module.exports.signin = catchAsyncError(async (req, res) => {
 
 // signout user
 module.exports.signout = catchAsyncError(async (req, res, next) => {
+  // req.session.destroy();
   req.logout(function (err) {
     if (err) {
       console.log("error signing out");
       return next(new AppError("Error while signing out ", 500));
     }
   });
+
+  // req.session = null;
 
   return res.status(200).json({
     status: "success",

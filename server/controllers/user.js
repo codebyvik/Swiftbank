@@ -11,6 +11,11 @@ const ForgotPassword = require("../db/models/forgotpassword");
 // get current user
 module.exports.sendCurrentUser = catchAsyncError(async (req, res, next) => {
   try {
+    console.log("inside controller");
+    console.log(req.user);
+    console.log(req.session);
+    console.log(req.isAuthenticated);
+
     return res.status(200).json({
       status: "success",
       message: "user fetched",
@@ -25,7 +30,7 @@ module.exports.sendCurrentUser = catchAsyncError(async (req, res, next) => {
 // get user through id
 module.exports.getUser = catchAsyncError(async (req, res, next) => {
   try {
-    if (req.user.user_type != "admin") {
+    if (req.user.user_type !== "admin") {
       return next(new AppError("You are not authorised ", 401));
     }
     const user = await User.findOne({ where: { id: req.params.id } });
@@ -49,7 +54,7 @@ module.exports.getAllUsers = catchAsyncError(async (req, res, next) => {
   const order = req.query.sort || "DESC"; //   sorting , by default descending
 
   try {
-    if (req.user.user_type != "admin") {
+    if (req.user.user_type !== "admin") {
       return next(new AppError("You are not authorised ", 401));
     }
     const users = await User.findAndCountAll({

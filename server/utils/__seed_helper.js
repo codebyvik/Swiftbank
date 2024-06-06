@@ -7,11 +7,6 @@ const Beneficiary = require("../db/models/beneficiaries");
 
 const fs = require("node:fs");
 
-const content = [
-  { name: "vik", age: 20 },
-  { name: "ram", age: 23 },
-];
-
 async function getAllUsersData(params) {
   try {
     const UsersData = await User.findAll();
@@ -39,10 +34,3 @@ async function getAllUsersData(params) {
 }
 
 module.exports = { getAllUsersData };
-// fs.writeFile("/Users/joe/test.txt", content, (err) => {
-//   if (err) {
-//     console.error(err);
-//   } else {
-//     // file written successfully
-//   }
-// });
